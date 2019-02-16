@@ -132,55 +132,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <p class="text-center help-block"><?php echo $form_error ?></p>
 
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form action="register.php" method="post">
 
             <div class="<?php echo (!empty($first_name_err)) ? 'has-error' : ''; ?>">
                 <!--                <label>First Name: </label>-->
                 <input type="text" name="first_name" class="input" placeholder="First Name"
                        value="<?php echo $first_name; ?>">
-                <span class="help-block"><?php echo $first_name_err; ?></span>
+                <span class="help-block text-center"><?php echo $first_name_err; ?></span>
             </div>
 
             <div class="<?php echo (!empty($last_name_err)) ? 'has-error' : ''; ?>">
                 <!--                <label>Last Name: </label>-->
                 <input type="text" name="last_name" class="input" placeholder="Last Name"
                        value="<?php echo $last_name; ?>">
-                <span class="help-block"><?php echo $last_name_err; ?></span>
+                <span class="help-block text-center"><?php echo $last_name_err; ?></span>
             </div>
 
             <div class="<?php echo (!empty($email_err)) ? 'has-error' : ''; ?>">
                 <!--                <label>Email: </label>-->
                 <input type="email" name="email" class="input" placeholder="example@gmail.com"
                        value="<?php echo $email; ?>">
-                <span class="help-block"><?php echo $email_err; ?></span>
+                <span class="help-block text-center"><?php echo $email_err; ?></span>
             </div>
 
             <div class="<?php echo (!empty($phone_err)) ? 'has-error' : ''; ?>">
                 <!--                <label>Phone: </label>-->
                 <input type="text" name="phone" class="input" placeholder="0722000000"
                        value="<?php echo $phone; ?>">
-                <span class="help-block"><?php echo $phone_err; ?></span>
+                <span class="help-block text-center"><?php echo $phone_err; ?></span>
             </div>
 
             <div class="<?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
                 <!--                <label>Password: </label>-->
                 <input type="password" name="password" class="input" placeholder="*******"
                        value="<?php echo $password; ?>">
-                <span class="help-block"><?php echo $password_err; ?></span>
+                <span class="help-block text-center"><?php echo $password_err; ?></span>
             </div>
 
             <div class="<?php echo (!empty($confirm_password_err)) ? 'has-error' : ''; ?>">
                 <!--                <label>Confirm Password: </label>-->
                 <input type="password" name="confirm_password" class="input" placeholder="*******"
                        value="<?php echo $confirm_password; ?>">
-                <span class="help-block"><?php echo $confirm_password_err; ?></span>
+                <span class="help-block text-center"><?php echo $confirm_password_err; ?></span>
             </div>
 
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
-                <input type="reset" class="btn btn-default" value="Reset">
+            <div class="">
+                <input type="submit" class="btn btn-primary input" value="Submit">
             </div>
-            <p>Already have an account? <a href="login.php">Login here</a>.</p>
+            <p class="text-center">Already have an account? <a href="login.php">LOGIN HERE</a>.</p>
         </form>
     </div>
 </div>
