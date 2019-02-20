@@ -6,37 +6,58 @@ require_once('../backend/connect.php');
 $events = array();
 $user_id = $_SESSION['id'];
 
-$sql = "SELECT * FROM events WHERE user_id = '$user_id'";
+$sql = "SELECT * FROM events WHERE user_id = '$user_id' AND deleted_at IS NULL OR deleted_at = ''";
 
-$result = mysqli_query($conn, $sql);
+$data = mysqli_query($conn, $sql);
 
 ?>
 
 <div class="events-content">
-    <h2>Events Section</h2>
+    <h2>My Request Events</h2>
+
+    <p><?php echo $delete_event_error ?></p>
 
     <table style="width:100%">
         <tr>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Date</th>
-            <th># of People</th>
-            <th>Budget</th>
-            <th></th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Location</th>
+            <th class="text-center">Date</th>
+            <th class="text-center"># of People</th>
+            <th class="text-center">Budget</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Actions</th>
         </tr>
 
-        <?php while($array = mysqli_fetch_row($result)) ?>
-        <tr>
-            <td><?echo $array[0];?></td>
-            <td><?echo $array[1];?></td>
-            <td><?echo $array[2];?></td>
-            <td><?echo $array[3];?></td>
-            <td><?echo $array[4];?></td>
-            <td><?echo $array[5];?></td>
-        </tr>
-        <?php ;?>
+        <?php while ($array = mysqli_fetch_row($data)) { ?>
+            <tr>
+                <td class="text-center"><?php echo $array[1]; ?></td>
+                <td class="text-center"><?php echo $array[2]; ?></td>
+                <td class="text-center"><?php echo $array[3]; ?></td>
+                <td class="text-center"><?php echo $array[4]; ?></td>
+                <td class="text-center"><?php echo $array[5]; ?></td>
+                <td class="text-center"><?php echo $array[6]; ?></td>
+                <td class="text-center">
+                    <form action="client_page.php" method="post">
+                        <input type="hidden" name="event_delete" value="delete">
 
-        <?php mysqli_free_result($result); ?>
-        <?php mysqli_close($conn); ?>
+                        <input type="hidden" name="event_id" value="<?php echo $array[0]; ?>">
+
+                        <button class="btn btn-delete">Delete</button>
+                    </form>
+
+                    <form action="client_page.php" method="post">
+                        <input type="hidden" name="event_edit" value="edit">
+
+                        <input type="hidden" name="event_id" value="<?php echo $array[0]; ?>">
+
+                        <button class="btn btn-edit">Edit</button>
+                    </form>
+                </td>
+            </tr>
+        <?php }; ?>
     </table>
 </div>
+
+<?php mysqli_free_result($data); ?>
+<?php mysqli_close($conn); ?>
+
