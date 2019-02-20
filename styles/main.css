@@ -161,17 +161,17 @@ p {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
-.service-pa{
+.service-pa {
     padding: 5px;
     text-align: center;
 }
 
-.service-icons{
+.service-icons {
     width: 100px;
     height: 100px;
 }
 
-.dash-body{
+.dash-body {
     display: flex;
     margin-top: 20px;
 }
@@ -180,7 +180,7 @@ p {
     width: 20%;
 }
 
-.dash-body .main-content{
+.dash-body .main-content {
     width: 70%;
 }
 
@@ -189,15 +189,27 @@ p {
     overflow-x: hidden;
 }
 
-.sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 20px;
-    color: #818181;
-    display: block;
+.btn-menu-side {
+    background: #6f5499;
+    color: white;
+    font-weight: 700;
 }
 
-.sidenav a:hover {
+.events-content{
     color: #000;
-    text-decoration: underline;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
 }

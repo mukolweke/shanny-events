@@ -118,9 +118,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 <div class="topnav">
-    <a href="../index.html">Home</a>
-    <a href="login.php">Login</a>
-    <a class="active" href="register.php">Register</a>
+    <div class="container">
+        <a href="../index.php">Home</a>
+        <a href="login.php">Login</a>
+        <a class="active" href="register.php">Register</a>
+    </div>
 </div>
 
 

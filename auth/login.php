@@ -3,7 +3,7 @@ session_start(); // session start
 
 // Check if the user is already logged in;
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("location: welcome.php");
+    header("location: ../index.php");
     exit;
 }
 
@@ -94,9 +94,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 <div class="topnav">
-    <a href="../index.html">Home</a>
-    <a class="active" href="login.php">Login</a>
-    <a href="register.php">Register</a>
+    <div class="container">
+        <a href="../index.php">Home</a>
+        <a class="active" href="login.php">Login</a>
+        <a href="register.php">Register</a>
+    </div>
 </div>
 
 

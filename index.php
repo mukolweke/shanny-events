@@ -1,3 +1,10 @@
+<?php
+
+session_start();
+
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +15,27 @@
 </head>
 <body>
 <div class="topnav">
-    <a class="active" href="./index.html">Home</a>
-    <a href="auth/login.php">Login</a>
-    <a href="auth/register.php">Register</a>
+    <div class="container"><a class="active" href="./index.php">Home</a>
+        <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
+            echo '<a href="auth/login.php">Login</a>'
+        ?>
 
+        <?php if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
+            echo '<a href="auth/register.php">Register</a>'
+        ?>
+
+        <?php if ((isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true) && $_SESSION['user_type'] == 1)
+            echo '<a href="admin/admin_page.php">Admin Dash</a>'
+        ?>
+
+        <?php if ((isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true) && $_SESSION['user_type'] == 2)
+            echo '<a href="client/client_page.php">Client Dash</a>'
+        ?>
+
+        <?php if (isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true)
+            echo '<a href="auth/logout.php">Logout</a>'
+        ?>
+    </div>
 </div>
 
 
@@ -19,7 +43,7 @@
     <div class="banner-text">
         <h1>Shanny's Events</h1>
         <p>We do events that will make awesome memories</p>
-        <button class="btn banner-btn">Hire me</button>
+        <a href="auth/login.php" class="btn banner-btn">Hire me</a>
     </div>
 </div>
 
@@ -54,5 +78,7 @@
         </div>
     </div>
 </div>
+
+<script rel="script" src="styles/main.js"></script>
 </body>
 </html>
