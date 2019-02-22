@@ -139,6 +139,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $edit_password = true;
         $active_page = "profile";
 
+    } elseif ($_POST['show_delete_account']) { // show delete account page
+        $delete_account = true;
+        $active_page = "profile";
+
+    } elseif ($_POST['cancel_delete_account']) { // cancel delete account page
+        $delete_account = false;
+        $active_page = "profile";
+
     } elseif ($_POST['edit_profile_details']) { // edit profile
         $user_id = $_POST['user_id'];
         $fname = $_POST['firstname'];
@@ -216,7 +224,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
         }
+    } elseif ($_POST['delete_account']) { // delete account
+        $user_id = $_POST['user_id'];
+        $deleted_date = date("Y/m/d"); // today's date
 
+        $sql = "UPDATE users SET deleted_at = '$deleted_date' WHERE id='$user_id'";
+
+        if (mysqli_query($conn, $sql)) {
+            header("location: ../auth/login.php");
+        } else {
+            $delete_error = "Something went wrong. Please try again later.";
+        }
     }
 }
 

@@ -65,7 +65,7 @@ $password = $details[5];
 
         <form action="client_page.php" method="post" style="float: left;width: 50%;">
             <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-            <input type="hidden" name="delete_account" value="delete_account">
+            <input type="hidden" name="show_delete_account" value="show_delete_account">
 
             <button class="delete_form_btn" style="text-decoration: none;">DELETE</button>
         </form>
@@ -155,12 +155,23 @@ $password = $details[5];
 
 
                 <div class="edit-form-group">
-                    <button name="submit" type="submit" id="contact-submit" class="cancel_form_btn"
-                            data-submit="...Sending">Cancel
-                    </button>
-                    <button name="submit" type="submit" id="contact-submit" class="delete_form_btn"
-                            data-submit="...Sending">Delete
-                    </button>
+
+                    <form action="client_page.php" method="post" style="float: left;width: 50%;">
+                        <input type="hidden" name="cancel_delete_account" value="cancel_delete_account">
+
+                        <button name="submit" type="submit" id="contact-submit" class="cancel_form_btn"
+                                data-submit="...Sending">Cancel
+                        </button>
+                    </form>
+
+                    <form action="client_page.php" method="post" style="float: left;width: 50%;">
+                        <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+                        <input type="hidden" name="delete_account" value="delete_account">
+
+                        <button name="submit" type="submit" id="contact-submit" class="delete_form_btn"
+                                data-submit="...Sending">Delete
+                        </button>
+                    </form>
                 </div>
             </form>
         <?php } ?>

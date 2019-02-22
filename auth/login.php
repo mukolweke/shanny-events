@@ -30,13 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate credentials on DB;
     if (empty($email_err) && empty($password_err)) {
-        $sql = "SELECT id, email, password, user_type FROM users WHERE email = ?";
+        $sql = "SELECT id, email, password, user_type FROM users WHERE email = '$email' AND deleted_at IS NULL OR deleted_at = ''";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
-            mysqli_stmt_bind_param($stmt, "s", $param_email);
-
-            $param_email = $email;
-
+            
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
 
