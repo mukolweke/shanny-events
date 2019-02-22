@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "SELECT id, email, password, user_type FROM users WHERE email = '$email' AND deleted_at IS NULL OR deleted_at = ''";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
-            
+
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
 
@@ -72,12 +72,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "Oops! Something went wrong. Please try again later.";
             }
         }
-
-        // Close statement
         mysqli_stmt_close($stmt);
     }
 
-    // Close connection
     mysqli_close($conn);
 }
 ?>

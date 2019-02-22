@@ -270,6 +270,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ?>
 
         <?php if (isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true)
+            echo $_SESSION["name"];
+        ?>
+
+        <?php if (isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true)
             echo '<a href="../auth/logout.php">Logout</a>'
         ?>
     </div>
@@ -282,14 +286,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form action="client_page.php" method="post">
                     <input type="hidden" name="page" value="events">
 
-                    <button class="btn btn-menu-side" type="submit">Events</button>
+                    <button class="btn btn-menu-side" type="submit">My Events</button>
                 </form>
                 <br>
                 <br>
                 <form action="client_page.php" method="post">
                     <input type="hidden" name="page" value="profile">
 
-                    <button class="btn btn-menu-side" type="submit">Profile</button>
+                    <button class="btn btn-menu-side" type="submit">My Profile</button>
                 </form>
             </div>
         </div>

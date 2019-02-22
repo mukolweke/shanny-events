@@ -2,6 +2,12 @@
 
 session_start();
 
+$username = "mike";
+
+if (isset($_SESSION["name"])) {
+    $username = $_SESSION["name"];
+}
+
 ?>
 
 
@@ -30,6 +36,10 @@ session_start();
 
         <?php if ((isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true) && $_SESSION['user_type'] == 2)
             echo '<a href="client/client_page.php">Client Dash</a>'
+        ?>
+
+        <?php if (isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true)
+            echo $username;
         ?>
 
         <?php if (isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true)
