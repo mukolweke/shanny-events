@@ -58,7 +58,7 @@ p {
 }
 
 .help-block {
-    color: red;
+    color: #d9534f;
 }
 
 .btn-primary {
@@ -220,14 +220,106 @@ table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
+    color: black;
 }
 
 td, th {
-    border: 1px solid #dddddd;
+    /*border: 1px solid #dddddd;*/
     text-align: left;
-    padding: 8px;
+    padding: 10px;
 }
 
 tr:nth-child(even) {
-    background-color: #dddddd;
+    /*background-color: #dddddd;*/
+}
+
+#edit_form {
+    background: #F9F9F9;
+    padding: 25px;
+    margin: 50px 0;
+}
+
+#edit_form h3 {
+    color: #F96;
+    display: block;
+    font-size: 30px;
+    font-weight: 400;
+}
+
+#edit_form h4 {
+    margin: 5px 0 15px;
+    display: block;
+    font-size: 13px;
+}
+
+.edit-form-group {
+    border: medium none !important;
+    margin: 0 0 10px;
+    min-width: 100%;
+    padding: 0;
+    width: 100%;
+}
+
+.edit-form-group > label {
+    margin-bottom: 20px;
+}
+
+#edit_form input[type="text"], #edit_form input[type="email"], #edit_form input[type="password"] {
+    width: 100%;
+    border: 1px solid #CCC;
+    background: #FFF;
+    margin: 0 0 5px;
+    padding: 10px;
+}
+
+#edit_form input[type="text"]:hover, #edit_form input[type="email"]:hover, #edit_form input[type="password"]:hover {
+    -webkit-transition: border-color 0.3s ease-in-out;
+    -moz-transition: border-color 0.3s ease-in-out;
+    transition: border-color 0.3s ease-in-out;
+    border: 1px solid #AAA;
+}
+
+
+.edit_form_btn {
+    cursor: pointer;
+    width: 20%;
+    border: none;
+    background: #0CF;
+    color: #FFF;
+    margin: 0 0 5px;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 3px;
+}
+
+.cancel_form_btn {
+    cursor: pointer;
+    width: 20%;
+    border: none;
+    background: #FFF;
+    color: #000;
+    margin: 0 0 5px;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 3px;
+}
+
+
+.delete_form_btn {
+    cursor: pointer;
+    width: 20%;
+    border: none;
+    background: #d9534f;
+    color: #FFF;
+    margin: 0 0 5px;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 3px;
+}
+
+.edit_form_btn:hover {
+    background: #09C;
+    -webkit-transition: background 0.3s ease-in-out;
+    -moz-transition: background 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
 }

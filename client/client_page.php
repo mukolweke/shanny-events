@@ -10,9 +10,9 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 }
 
 $active_page = 'events';
-$form_active = false;
-$event_name = $event_location = $event_date = $event_people = $event_costs = "";
-$event_form_error = $form_submitted = $delete_event_error = $event_date_edit = "";
+$form_active = $edit_profile = $edit_password = $delete_account = false;
+$event_name = $event_location = $event_date = $event_people = $event_costs = $delete_error = "";
+$event_form_error = $form_submitted = $delete_event_error = $event_date_edit = $success_message = "";
 $event_id = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -84,13 +84,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if (empty($event_date)) {
                     $event_date_edit = $_POST['event_date_edit'];
-                }else {
+                } else {
                     $event_date_edit = $event_date;
                 }
-                
-                $sql = "UPDATE events SET name = '$event_name', location = '$event_location', date = '$event_date_edit', people_count = '$event_people', total_cost = '$event_costs' WHERE id = '$event_id'";
 
-                echo(mysqli_query($conn, $sql));
+                $sql = "UPDATE events SET name = '$event_name', location = '$event_location', date = '$event_date_edit', people_count = '$event_people', total_cost = '$event_costs' WHERE id = '$event_id'";
 
                 if (mysqli_query($conn, $sql)) {
                     header("location: client_page.php");
@@ -133,6 +131,92 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
         }
+    } elseif ($_POST['show_edit_profile']) { // show edit profile page
+        $edit_profile = true;
+        $active_page = "profile";
+
+    } elseif ($_POST['show_edit_password']) { // show edit password page
+        $edit_password = true;
+        $active_page = "profile";
+
+    } elseif ($_POST['edit_profile_details']) { // edit profile
+        $user_id = $_POST['user_id'];
+        $fname = $_POST['firstname'];
+        $lname = $_POST['lastname'];
+        $mail = $_POST['email'];
+        $phone = $_POST['phone'];
+
+        $sql = "UPDATE users SET first_name = '$fname', last_name = '$lname', email = '$mail', phone = '$phone' WHERE id='$user_id'";
+
+        if (mysqli_query($conn, $sql)) {
+            $edit_profile = false;
+            $active_page = "profile";
+            $success_message = "Profile Details updates successfully";
+
+            header("location: client_page.php");
+        } else {
+            $edit_profile = true;
+            $active_page = "profile";
+            $delete_error = "Something went wrong. Please try again later.";
+        }
+    } elseif ($_POST['edit_profile_password']) { //edit password
+        $user_id = $_POST['user_id'];
+        $p_pass = $_POST['password_previous'];
+        $n_pass = $_POST['password_new'];
+        $n_pass_conf = $_POST['password_new_confirm'];
+
+        $sql = "SELECT password FROM users WHERE id = '$user_id'";
+
+        if (strlen(trim($n_pass)) < 6 && strlen(trim($n_pass_conf)) < 6 && strlen(trim($p_pass)) < 6) {
+            $edit_password = true;
+            $active_page = "profile";
+            $delete_error = "The passwords provided are less than 6 characters.";
+
+        } elseif (empty($delete_error) && ($n_pass !== $n_pass_conf)) {
+            $edit_password = true;
+            $active_page = "profile";
+            $delete_error = "The new passwords don't match, try again.";
+
+        } else {
+
+            $new_pass = password_hash($n_pass, PASSWORD_DEFAULT);
+
+            if ($stmt = mysqli_prepare($conn, $sql)) {
+                if (mysqli_stmt_execute($stmt)) {
+                    mysqli_stmt_store_result($stmt);
+
+                    if (mysqli_stmt_num_rows($stmt) == 1) {
+                        mysqli_stmt_bind_result($stmt, $hashed_pass);
+
+                        if (mysqli_stmt_fetch($stmt)) {
+                            if (password_verify($p_pass, $hashed_pass)) {
+                                $sql = "UPDATE users SET password = '$new_pass' WHERE id='$user_id'";
+
+                                if (mysqli_query($conn, $sql)) {
+                                    $active_page = "profile";
+                                    $edit_password = false;
+                                    $success_message = "Profile Password updates successfully";
+
+                                } else {
+                                    $active_page = "profile";
+                                    $edit_password = true;
+                                    $delete_error = "Something went wrong. Please try again later.";
+                                }
+                            } else {
+                                $edit_password = true;
+                                $active_page = "profile";
+                                $delete_error = "Password doesn't match. Try Again.";
+                            }
+                        }
+                    }
+                } else {
+                    $edit_password = true;
+                    $active_page = "profile";
+                    $delete_error = "cjui.";
+                }
+            }
+        }
+
     }
 }
 
@@ -204,9 +288,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <button class="btn btn-primary" type="submit">Request Event</button>
                     </form>
-                <?php }
-            ; ?>
-
+                <?php } ?>
 
                 <br>
 
@@ -218,7 +300,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 include 'events.php';
 
-            } else {
+            } elseif ($active_page == 'profile') {
                 include 'profile.php';
             }
             ?>
