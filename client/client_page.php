@@ -17,13 +17,13 @@ $event_id = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if ($_POST['page'] === 'events') {
+    if (isset($_POST['page']) && $_POST['page'] === 'events') {
         $active_page = 'events';
-    } elseif ($_POST['page'] === 'profile') {
+    } elseif (isset($_POST['page']) && $_POST['page'] === 'profile') {
         $active_page = 'profile';
-    } elseif ($_POST["form_active"]) {
+    } elseif (isset($_POST["form_active"])) {
         $form_active = true;
-    } elseif ($_POST['event_form']) { //save new details
+    } elseif (isset($_POST['event_form'])) { //save new details
         if (
             empty(trim($_POST['event_name'])) &&
             empty(trim($_POST['event_location'])) &&
@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         }
-    } elseif ($_POST['event_delete']) { //soft delete existing details
+    } elseif (isset($_POST['event_delete'])) { //soft delete existing details
         $event_id = $_POST['event_id'];
         $deleted_date = date("Y/m/d"); // today's date
 
@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $delete_event_error = "Something went wrong. Please try again later.";
         }
 
-    } elseif ($_POST['event_edit']) { // edit existing details
+    } elseif (isset($_POST['event_edit'])) { // edit existing details
         $form_active = true;
         $event_id = $_POST['event_id'];
 
@@ -131,23 +131,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
         }
-    } elseif ($_POST['show_edit_profile']) { // show edit profile page
+    } elseif (isset($_POST['show_edit_profile'])) { // show edit profile page
         $edit_profile = true;
         $active_page = "profile";
 
-    } elseif ($_POST['show_edit_password']) { // show edit password page
+    } elseif (isset($_POST['show_edit_password'])) { // show edit password page
         $edit_password = true;
         $active_page = "profile";
 
-    } elseif ($_POST['show_delete_account']) { // show delete account page
+    } elseif (isset($_POST['show_delete_account'])) { // show delete account page
         $delete_account = true;
         $active_page = "profile";
 
-    } elseif ($_POST['cancel_delete_account']) { // cancel delete account page
+    } elseif (isset($_POST['cancel_delete_account'])) { // cancel delete account page
         $delete_account = false;
         $active_page = "profile";
 
-    } elseif ($_POST['edit_profile_details']) { // edit profile
+    } elseif (isset($_POST['edit_profile_details'])) { // edit profile
         $user_id = $_POST['user_id'];
         $fname = $_POST['firstname'];
         $lname = $_POST['lastname'];
@@ -161,13 +161,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $active_page = "profile";
             $success_message = "Profile Details updates successfully";
 
-            header("location: client_page.php");
         } else {
             $edit_profile = true;
             $active_page = "profile";
             $delete_error = "Something went wrong. Please try again later.";
         }
-    } elseif ($_POST['edit_profile_password']) { //edit password
+    } elseif (isset($_POST['edit_profile_password'])) { //edit password
         $user_id = $_POST['user_id'];
         $p_pass = $_POST['password_previous'];
         $n_pass = $_POST['password_new'];
@@ -224,7 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
         }
-    } elseif ($_POST['delete_account']) { // delete account
+    } elseif (isset($_POST['delete_account'])) { // delete account
         $user_id = $_POST['user_id'];
         $deleted_date = date("Y/m/d"); // today's date
 
