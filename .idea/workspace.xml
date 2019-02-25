@@ -2,15 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f9e88121-580f-4ea0-805a-a085b8c06d68" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/admin/clients.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin/events.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin/partials/latest_events.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin/partials/view_event.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/admin/profile.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/admin_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/admin_page.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/events.php" beforeDir="false" afterPath="$PROJECT_DIR$/client/events.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shanny-events.mwb" beforeDir="false" afterPath="$PROJECT_DIR$/shanny-events.mwb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/events.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/events.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/partials/latest_events.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/partials/lists_events.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/partials/view_event.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/partials/view_event.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/styles/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/main.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,10 +20,10 @@
       <split-first>
         <leaf>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/admin/partials/view_event.php">
+            <entry file="file://$PROJECT_DIR$/admin/admin_page.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="270">
-                  <caret line="18" column="41" selection-start-line="18" selection-start-column="41" selection-end-line="18" selection-end-column="41" />
+                <state relative-caret-position="764">
+                  <caret line="122" lean-forward="true" selection-start-line="122" selection-end-line="122" />
                 </state>
               </provider>
             </entry>
@@ -37,10 +33,10 @@
       <split-second>
         <leaf>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/client/profile.php">
+            <entry file="file://$PROJECT_DIR$/admin/partials/view_event.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="180">
-                  <caret line="12" selection-start-line="12" selection-end-line="18" selection-end-column="24" />
+                <state relative-caret-position="927">
+                  <caret line="108" column="35" selection-start-line="108" selection-start-column="35" selection-end-line="108" selection-end-column="35" />
                 </state>
               </provider>
             </entry>
@@ -99,12 +95,13 @@
         <option value="$PROJECT_DIR$/index.php" />
         <option value="$PROJECT_DIR$/auth/login.php" />
         <option value="$PROJECT_DIR$/client/client_page.php" />
-        <option value="$PROJECT_DIR$/admin/admin_page.php" />
-        <option value="$PROJECT_DIR$/styles/main.css" />
         <option value="$PROJECT_DIR$/client/events.php" />
         <option value="$PROJECT_DIR$/admin/partials/view_events.php" />
         <option value="$PROJECT_DIR$/admin/partials/latest_events.php" />
+        <option value="$PROJECT_DIR$/styles/main.css" />
+        <option value="$PROJECT_DIR$/admin/partials/lists_events.php" />
         <option value="$PROJECT_DIR$/admin/events.php" />
+        <option value="$PROJECT_DIR$/admin/admin_page.php" />
         <option value="$PROJECT_DIR$/admin/partials/view_event.php" />
       </list>
     </option>
@@ -204,12 +201,12 @@
       <workItem from="1550657984564" duration="8857000" />
       <workItem from="1550674284887" duration="1815000" />
       <workItem from="1550822125393" duration="12155000" />
-      <workItem from="1551092950445" duration="5993000" />
+      <workItem from="1551092950445" duration="9343000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="48045000" />
+    <option name="totallyTimeSpent" value="51395000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -307,24 +304,10 @@
     <entry file="file://$PROJECT_DIR$/admin/profile.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/client_page.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3903">
-          <caret line="17" selection-start-line="17" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/backend/connect.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/styles/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="125" lean-forward="true" selection-start-line="125" selection-end-line="125" />
         </state>
       </provider>
     </entry>
@@ -335,41 +318,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/admin/partials/latest_events.php">
+    <entry file="file://$PROJECT_DIR$/admin/clients.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/profile.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="9" selection-end-column="2" />
+        <state relative-caret-position="345">
+          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/styles/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="906">
+          <caret line="351" column="24" selection-start-line="351" selection-start-column="24" selection-end-line="351" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/partials/ongoing_events.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/partials/lists_events.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="35" column="19" lean-forward="true" selection-start-line="35" selection-start-column="19" selection-end-line="35" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/client_page.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-74">
+          <caret line="23" column="45" lean-forward="true" selection-start-line="23" selection-start-column="45" selection-end-line="23" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/events.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="777">
+          <caret line="67" column="47" lean-forward="true" selection-start-line="67" selection-start-column="47" selection-end-line="67" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/admin/admin_page.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="38" selection-start-line="3" selection-start-column="38" selection-end-line="3" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/clients.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/events.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" column="50" selection-start-line="32" selection-start-column="50" selection-end-line="32" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/profile.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" selection-start-line="12" selection-end-line="18" selection-end-column="24" />
+        <state relative-caret-position="764">
+          <caret line="122" lean-forward="true" selection-start-line="122" selection-end-line="122" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/admin/partials/view_event.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="41" selection-start-line="18" selection-start-column="41" selection-end-line="18" selection-end-column="41" />
+        <state relative-caret-position="927">
+          <caret line="108" column="35" selection-start-line="108" selection-start-column="35" selection-end-line="108" selection-end-column="35" />
         </state>
       </provider>
     </entry>

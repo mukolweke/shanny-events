@@ -343,3 +343,12 @@ tr:nth-child(even) {
 .admin-page-actions button {
     border-radius: 0;
 }
+
+.admin-view-event-action {
+    display: flex;
+}
+
+
+.admin-view-event-action button {
+    border-radius: 0;
+}

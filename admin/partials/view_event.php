@@ -1,12 +1,13 @@
 <?php
 
-$event_id = 1; // latest status
+//$event_id = 1; // latest status
 
 // latest events
 $sqlEvent = "SELECT * FROM events WHERE id = '$event_id'";
 $event_data = mysqli_query($conn, $sqlEvent);
 $event_details = mysqli_fetch_row($event_data);
 
+$id = $event_details[0];
 $name = $event_details[1];
 $location = $event_details[2];
 $date = $event_details[3];
@@ -65,8 +66,50 @@ $status_name = $status_details[1];
             </tr>
 
             <tr>
-                <td>Status</td>
-                <td><?php echo $status_name ?></td>
+                <th>Actions</th>
+                <td>
+                    <div class="admin-view-event-action">
+                        <?php if ($status_id == 3) { ?>
+                            <form action="" method="post">
+                                <input type="hidden" name="view_event_action" value="accept">
+
+                                <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+
+                                <button class="btn btn-success">Accept</button>
+                            </form>
+                            <form action="" method="post">
+                                <input type="hidden" name="view_event_action" value="reject">
+
+                                <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+
+                                <button class="btn btn-delete">Reject</button>
+                            </form>
+                        <?php } elseif ($status_id == 2) { ?>
+                            <form action="" method="post">
+                                <input type="hidden" name="view_event_action" value="add_sub_task">
+
+                                <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+
+                                <button class="btn btn-edit">Add Subtask</button>
+                            </form>
+                            <form action="" method="post">
+                                <input type="hidden" name="view_event_action" value="done">
+
+                                <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+
+                                <button class="btn btn-success">Done</button>
+                            </form>
+                        <?php } elseif ($status_id == 1) { ?>
+                            <form action="" method="post">
+                                <input type="hidden" name="view_event_action" value="view_sub_task">
+
+                                <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+
+                                <button class="btn btn-edit">View Subtask</button>
+                            </form>
+                        <?php } ?>
+                    </div>
+                </td>
             </tr>
 
         </table>

@@ -5,12 +5,15 @@ require_once "../backend/connect.php";
 
 // Check if the user is logged in;
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: login.php");
+    header("location: ../auth/login.php");
     exit;
 }
 
 $active_page = 'events';
-$latest_action = $ongoing_action = $completed_action = false;
+$latest_action = true;
+$status_id = 3;
+$ongoing_action = $completed_action = $view_event = false;
+$event_action_error = $event_action_success = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // change active pages
@@ -31,11 +34,89 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $action = $_POST['admin_page_action'];
 
         if ($action == "latest") {
+            $completed_action = $ongoing_action = false;
             $latest_action = true;
+            $status_id = 3;
         } elseif ($action == "ongoing") {
+            $latest_action = $completed_action = false;
             $ongoing_action = true;
+            $status_id = 2;
         } elseif ($action == "completed") {
+            $latest_action = $ongoing_action = false;
             $completed_action = true;
+            $status_id = 1;
+        }
+    }
+
+    // view event
+    if (isset($_POST['view_event'])) {
+        $active_page = 'events';
+        $view_event = true;
+        $event_id = $_POST['event_id'];
+        $status_id = $_POST['status_id'];
+
+        if ($status_id == 3) {
+            $completed_action = $ongoing_action = false;
+            $latest_action = true;
+        } elseif ($status_id == 2) {
+            $latest_action = $completed_action = false;
+            $ongoing_action = true;
+        } elseif ($status_id == 1) {
+            $latest_action = $ongoing_action = false;
+            $completed_action = true;
+        }
+    }
+
+    // view_event_action
+    if (isset($_POST['view_event_action'])) {
+        $action = $_POST['view_event_action'];
+        $event_id = $_POST['event_id'];
+        $active_page = 'events';
+
+        if ($action == 'accept') {
+            $sql = "UPDATE events SET status = 2 WHERE id = '$event_id'";
+
+            if (mysqli_query($conn, $sql)) {
+                $active_page = 'events';
+                $completed_action = $ongoing_action = false;
+                $latest_action = true;
+                $event_action_success = "Event status successfully upgraded";
+            } else {
+                $active_page = 'events';
+                $completed_action = $ongoing_action = false;
+                $latest_action = true;
+                $event_action_error = "Something went wrong. Please try again later.";
+            }
+        } elseif ($action == 'reject') {
+            $sql = "UPDATE events SET status = 4 WHERE id = '$event_id'";
+
+            if (mysqli_query($conn, $sql)) {
+                $active_page = 'events';
+                $completed_action = $ongoing_action = false;
+                $latest_action = true;
+                $event_action_success = "Event status successfully rejected";
+            } else {
+                $active_page = 'events';
+                $completed_action = $ongoing_action = false;
+                $latest_action = true;
+                $event_action_error = "Something went wrong. Please try again later.";
+            }
+        } elseif ($action == 'done') {
+            $sql = "UPDATE events SET status = 1 WHERE id = '$event_id'";
+
+            if (mysqli_query($conn, $sql)) {
+                $active_page = 'events';
+                $latest_action = $completed_action = false;
+                $ongoing_action = true;
+                $event_action_success = "Event successfully marked done";
+            } else {
+                $active_page = 'events';
+                $latest_action = $completed_action = false;
+                $ongoing_action = true;
+                $event_action_error = "Something went wrong. Please try again later.";
+            }
+        } elseif ($action == 'view_sub_task'){
+            // view all subtask
         }
     }
 
