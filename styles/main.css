@@ -107,6 +107,14 @@ p {
     border-radius: 4px;
 }
 
+.action-btns {
+    display: flex;
+}
+
+.action-btns button {
+    border-radius: 0;
+}
+
 .topnav a {
     float: left;
     color: #f2f2f2;
@@ -322,4 +330,16 @@ tr:nth-child(even) {
     -webkit-transition: background 0.3s ease-in-out;
     -moz-transition: background 0.3s ease-in-out;
     transition: background-color 0.3s ease-in-out;
+}
+
+.events-admin {
+
+}
+
+.admin-page-actions {
+    display: flex;
+}
+
+.admin-page-actions button {
+    border-radius: 0;
 }

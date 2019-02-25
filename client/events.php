@@ -3,7 +3,6 @@ session_start();
 
 require_once('../backend/connect.php');
 
-$events = array();
 $user_id = $_SESSION['id'];
 
 $sql = "SELECT * FROM events WHERE user_id = '$user_id' AND deleted_at IS NULL OR deleted_at = ''";
@@ -19,24 +18,24 @@ $data = mysqli_query($conn, $sql);
 
     <table style="width:100%">
         <tr>
-            <th class="text-center">Name</th>
-            <th class="text-center">Location</th>
-            <th class="text-center">Date</th>
-            <th class="text-center"># of People</th>
-            <th class="text-center">Budget</th>
-            <th class="text-center">Status</th>
-            <th class="text-center">Actions</th>
+            <th class="">Name</th>
+            <th class="">Location</th>
+            <th class="">Date</th>
+            <th class=""># of People</th>
+            <th class="">Budget</th>
+            <th class="">Status</th>
+            <th class="">Actions</th>
         </tr>
 
         <?php while ($array = mysqli_fetch_row($data)) { ?>
             <tr>
-                <td class="text-center"><?php echo $array[1]; ?></td>
-                <td class="text-center"><?php echo $array[2]; ?></td>
-                <td class="text-center"><?php echo $array[3]; ?></td>
-                <td class="text-center"><?php echo $array[4]; ?></td>
-                <td class="text-center"><?php echo $array[5]; ?></td>
-                <td class="text-center"><?php echo $array[6]; ?></td>
-                <td class="text-center">
+                <td class=""><?php echo $array[1]; ?></td>
+                <td class=""><?php echo $array[2]; ?></td>
+                <td class=""><?php echo $array[3]; ?></td>
+                <td class=""><?php echo $array[4]; ?></td>
+                <td class=""><?php echo $array[5]; ?></td>
+                <td class=""><?php echo $array[6]; ?></td>
+                <td class=" action-btns">
                     <form action="client_page.php" method="post">
                         <input type="hidden" name="event_delete" value="delete">
 
