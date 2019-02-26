@@ -272,7 +272,7 @@ tr:nth-child(even) {
     margin-bottom: 20px;
 }
 
-#edit_form input[type="text"], #edit_form input[type="email"], #edit_form input[type="password"] {
+#edit_form input[type="text"], #edit_form input[type="email"], #edit_form input[type="password"], #edit_form input[type="number"], #edit_form textarea {
     width: 100%;
     border: 1px solid #CCC;
     background: #FFF;
@@ -280,7 +280,7 @@ tr:nth-child(even) {
     padding: 10px;
 }
 
-#edit_form input[type="text"]:hover, #edit_form input[type="email"]:hover, #edit_form input[type="password"]:hover {
+#edit_form input[type="text"]:hover, #edit_form input[type="email"]:hover, #edit_form input[type="password"]:hover, #edit_form input[type="number"]:hover, #edit_form textarea:hover {
     -webkit-transition: border-color 0.3s ease-in-out;
     -moz-transition: border-color 0.3s ease-in-out;
     transition: border-color 0.3s ease-in-out;
