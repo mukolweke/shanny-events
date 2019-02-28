@@ -2,7 +2,7 @@
 
 require_once('../backend/connect.php');
 
-$first_name = $last_name = $email = $phone = $password = $confirm_password = "";
+$first_name = $last_name = $email = $phone = $password = $confirm_password = $form_error  = "";
 $first_name_err = $last_name_err = $email_err = $phone_err = $password_err = $confirm_password_err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

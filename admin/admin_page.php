@@ -211,7 +211,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ?>
 
         <?php if (isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true)
-            echo $_SESSION["name"];
+            echo $_SESSION["email"];
         ?>
 
         <?php if (isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true)

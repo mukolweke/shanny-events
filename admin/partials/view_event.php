@@ -175,7 +175,7 @@ function setSum($value)
         <?php if ($sub_task_form) { ?>
             <div>
                 <!-- form to add the tasks -->
-                <form id="edit_form" action="/admin/admin_page.php" method="post">
+                <form id="edit_form" action="../admin/admin_page.php" method="post">
                     <h3>Add SubTask</h3>
 
                     <div class="edit-form-group">

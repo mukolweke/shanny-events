@@ -23,7 +23,7 @@ $latest_data = mysqli_query($conn, $sql);
                 <td class=""><?php echo $array[2]; ?></td>
                 <td class=""><?php echo $array[3]; ?></td>
                 <td class=" action-btns">
-                    <form action="/admin/admin_page.php" method="post">
+                    <form action="../admin/admin_page.php" method="post">
                         <input type="hidden" name="view_event" value="view">
 
                         <input type="hidden" name="event_id" value="<?php echo $array[0]; ?>">

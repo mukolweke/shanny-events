@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require_once "../backend/connect.php";
 
 $user_id = $_SESSION['id'];

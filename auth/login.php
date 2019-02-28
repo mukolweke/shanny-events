@@ -55,10 +55,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             //redirect user according to user type
                             if ($user_type == 1) {
                                 // admin/ event planner
-                                header("location: /admin/admin_page.php");
+                                header("location: ../admin/admin_page.php");
                             } elseif ($user_type == 2) {
                                 // customer
-                                header("location: /client/client_page.php");
+                                header("location: ../client/client_page.php");
                             }
 
                         } else {

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once('../backend/connect.php');
+require_once "../backend/connect.php";
 
 // Check if the user is logged in;
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
@@ -266,10 +266,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <?php if ((isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true) && $_SESSION['user_type'] == 2)
             echo '<a href="../client/client_page.php">Client Dash</a>'
-        ?>
-
-        <?php if (isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true)
-            echo $_SESSION["name"];
         ?>
 
         <?php if (isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === true)
