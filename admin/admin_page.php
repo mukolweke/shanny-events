@@ -13,6 +13,7 @@ $active_page = 'events';
 $latest_action = true;
 $status_id = 3;
 $ongoing_action = $completed_action = $rejected_action = $view_event = $sub_task_form = false;
+$add_funds_request = $edit_task = false;
 $event_action_error = $event_action_success = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -87,11 +88,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $active_page = 'events';
                 $completed_action = $ongoing_action = $rejected_action = false;
                 $latest_action = true;
+                $status_id = 1;
                 $event_action_success = "Event status successfully upgraded";
             } else {
                 $active_page = 'events';
                 $completed_action = $ongoing_action = $rejected_action = false;
                 $latest_action = true;
+                $status_id = 1;
                 $event_action_error = "Something went wrong. Please try again later.";
             }
         } elseif ($action == 'reject') {
@@ -101,11 +104,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $active_page = 'events';
                 $completed_action = $ongoing_action = $rejected_action = false;
                 $latest_action = true;
+                $status_id = 1;
                 $event_action_success = "Event status successfully rejected";
             } else {
                 $active_page = 'events';
                 $completed_action = $ongoing_action = $rejected_action = false;
                 $latest_action = true;
+                $status_id = 1;
                 $event_action_error = "Something went wrong. Please try again later.";
             }
         } elseif ($action == 'done') {
@@ -115,17 +120,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $active_page = 'events';
                 $latest_action = $completed_action = $rejected_action = false;
                 $ongoing_action = true;
+                $status_id = 2;
                 $event_action_success = "Event successfully marked done";
             } else {
                 $active_page = 'events';
                 $latest_action = $completed_action = $rejected_action = false;
                 $ongoing_action = true;
+                $status_id = 2;
                 $event_action_error = "Something went wrong. Please try again later.";
             }
         } elseif ($action = 'view_sub_task') {
             $active_page = 'events';
             $latest_action = $completed_action = $rejected_action = false;
             $ongoing_action = true;
+            $status_id = 2;
             $view_event = true;
             $event_id = $_POST['event_id'];
             $sub_task_form = true;
@@ -134,14 +142,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // sub-task actions
     if (isset($_POST['event_sub_task_actions'])) {
-        $event_action = $_POST['event_sub_task_actions'];
+        $event_task_action = $_POST['event_sub_task_actions'];
 
-        if ($event_action == 'add_sub_task') {
+        if ($event_task_action == 'add_sub_task') {
             $name = $_POST['name'];
             $description = $_POST['description'];
             $cost = $_POST['cost'];
             $event = $_POST['event_id'];
-            $task_sum = $_POST['task_sum'];
+            $task_sum = $_POST['task_sum'] + $cost;
 
             $sqlEvent = "SELECT * FROM events WHERE id = '$event'";
             $event_data = mysqli_query($conn, $sqlEvent);
@@ -155,6 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $active_page = 'events';
                     $latest_action = $completed_action = $rejected_action = false;
                     $ongoing_action = true;
+                    $status_id = 2;
                     $view_event = true;
                     $event_id = $event;
                     $sub_task_form = false;
@@ -162,6 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } else {
                     $active_page = 'events';
                     $ongoing_action = true;
+                    $status_id = 2;
                     $latest_action = $completed_action = $rejected_action = false;
                     $view_event = true;
                     $event_id = $event;
@@ -170,14 +180,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             } else {
                 $active_page = 'events';
-                $ongoing_action = true;
                 $latest_action = $completed_action = $rejected_action = false;
+                $ongoing_action = true;
+                $status_id = 2;
                 $view_event = true;
                 $event_id = $event;
+                $add_funds_request = true;
                 $sub_task_form = false;
-                $event_action_error = "The Budget limit has reached. Please add budget to spend";
+                $event_action_error = "The Budget limit has reached. Please add or edit current budget to spend";
             }
 
+        } else if ($event_task_action == 'request_add_funds') {
+            $to = $_POST['client_id'];
+            $from = $_SESSION['id'];
+            $message = "Additional Funds requested for this event";
+            $event = $_POST['event_id'];
+
+
+            $sqlAddFunds = "INSERT INTO notifications (from_id, to_id, message, event, status) values ('$from', '$to', '$message', '$event', 1)";
+
+            if (mysqli_query($conn, $sqlAddFunds)) {
+                $active_page = 'events';
+                $latest_action = $completed_action = $rejected_action = false;
+                $ongoing_action = true;
+                $status_id = 2;
+                $view_event = true;
+                $event_id = $event;
+                $add_funds_request = false;
+                $sub_task_form = false;
+                $event_action_success = "Event Notification sent successfully to client";
+            } else {
+                $active_page = 'events';
+                $latest_action = $completed_action = $rejected_action = false;
+                $ongoing_action = true;
+                $status_id = 2;
+                $view_event = true;
+                $event_id = $event;
+                $add_funds_request = true;
+                $sub_task_form = false;
+                $event_action_error = "Notification not sent...";
+            }
+        } else if ($event_task_action == 'show_edit_task') {
+            $active_page = 'events';
+            $latest_action = $completed_action = $rejected_action = false;
+            $ongoing_action = true;
+            $status_id = 2;
+            $view_event = true;
+            $event_id = $_POST['event_id'];
+            $task_id = $_POST['task_id'];
+            $edit_task = true;
+            $sub_task_form = false;
         }
     }
 }

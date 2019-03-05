@@ -29,7 +29,6 @@ $status_name = $status_details[1];
 $sql = "SELECT * FROM events_task WHERE event_id = '$id' AND deleted_at IS NULL OR deleted_at = ''";
 $events_task_data = mysqli_query($conn, $sql);
 
-
 $sum = 0;
 
 function setSum($value)
@@ -38,6 +37,10 @@ function setSum($value)
 
     return $sum += $value;
 }
+
+echo $sum;
+
+$event_balance = $total_cost - $sum;
 
 ?>
 
@@ -68,7 +71,12 @@ function setSum($value)
 
             <tr>
                 <td>Budget</td>
-                <td><?php echo $total_cost ?></td>
+                <td><?php echo $total_cost ?> Ksh</td>
+            </tr>
+
+            <tr>
+                <td>Current Balance</td>
+                <td><?php echo $event_balance ?> Ksh</td>
             </tr>
 
             <tr>
@@ -103,6 +111,16 @@ function setSum($value)
 
                                 <button class="btn btn-edit">Add Subtask</button>
                             </form>
+                            <?php if ($add_funds_request) { ?>
+                                <form action="" method="post">
+                                    <input type="hidden" name="event_sub_task_actions" value="request_add_funds">
+
+                                    <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+                                    <input type="hidden" name="client_id" value="<?php echo $user_id; ?>">
+
+                                    <button class="btn btn-primary">Request Funds</button>
+                                </form>
+                            <?php } ?>
                             <form action="" method="post">
                                 <input type="hidden" name="view_event_action" value="done">
 
@@ -152,7 +170,14 @@ function setSum($value)
                             <td><?php echo $row['cost']; ?></td>
                             <td style="display: none;"><?php setSum($row['cost']) ?></td>
                             <td>
-                                <button class="btn btn-edit">Edit</button>
+                                <form action="" method="post">
+                                    <input type="hidden" value="<?php echo $row['id']; ?>" name="task_id"/>
+                                    <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+
+                                    <input type="hidden" name="event_sub_task_actions" value="show_edit_task">
+
+                                    <button class="btn btn-edit">Edit</button>
+                                </form>
                             </td>
                         </tr>
                         <?php
@@ -206,6 +231,33 @@ function setSum($value)
                     </div>
                 </form>
             </div>
+        <?php } ?>
+
+        <?php if ($edit_task) { ?>
+            <h3>Edit SubTask</h3>
+
+            <table cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>Name</td>
+                    <td><?php echo $name ?></td>
+                </tr>
+
+                <tr>
+                    <td>Description</td>
+                    <td><?php echo $location ?></td>
+                </tr>
+
+                <tr>
+                    <td>Cost</td>
+                    <td><?php echo $date ?></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td><?php echo $people_count ?></td>
+                </tr>
+
+            </table>
         <?php } ?>
 
     <?php } ?>
