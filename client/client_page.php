@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $param_date = $event_date;
                     $param_people = $event_people;
                     $param_cost = $event_costs;
-                    $param_status = 'Un-Booked';
+                    $param_status = 3; // latest event
                     $param_user = $_SESSION['id'];
 
                     if (mysqli_stmt_execute($stmt)) {
