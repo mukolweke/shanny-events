@@ -44,7 +44,6 @@ session_start();
         <h1>Shanny's Events</h1>
         <p>We do events that will make awesome memories</p>
         <a href="auth/login.php" class="btn banner-btn">Hire me</a>
-        <img src="/styles/img/banner1.jpg" class="backdrop"/>
     </div>
 </div>
 

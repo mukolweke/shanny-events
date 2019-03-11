@@ -140,9 +140,10 @@ p {
 }
 
 .backdrop {
-    background: black url(/styles/img/banner1.jpg) no-repeat;
+    background-image: url(/styles/img/banner1.jpg);
+    background-repeat: no-repeat;
     background-size: cover;
-    /*position: relative;*/
+    position: relative;
     height: 550px;
     width: 100%;
 }
