@@ -173,8 +173,5 @@ $password = $details[5];
                 </div>
             </form>
         <?php } ?>
-
-
     </div>
-
 </div>

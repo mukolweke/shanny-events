@@ -13,7 +13,7 @@ $active_page = 'events';
 $form_active = $edit_profile = $edit_password = $delete_account = false;
 $event_name = $event_location = $event_date = $event_people = $event_costs = $delete_error = "";
 $event_form_error = $form_submitted = $delete_event_error = $event_date_edit = $success_message = "";
-$event_id = null;
+$event_id = $notification_count = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -21,6 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $active_page = 'events';
     } elseif (isset($_POST['page']) && $_POST['page'] === 'profile') {
         $active_page = 'profile';
+    } elseif (isset($_POST['page']) && $_POST['page'] === 'notification') {
+        $active_page = 'notification';
     } elseif (isset($_POST["form_active"])) {
         $form_active = true;
     } elseif (isset($_POST['event_form'])) { //save new details
@@ -230,7 +232,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "UPDATE users SET deleted_at = '$deleted_date' WHERE id='$user_id'";
 
         if (mysqli_query($conn, $sql)) {
-            header("location: ../auth/login.php");
+            $_SESSION = array();
+            session_destroy();
+
+            header("location: ../index.php");
         } else {
             $delete_error = "Something went wrong. Please try again later.";
         }
@@ -290,6 +295,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <button class="btn btn-menu-side" type="submit">My Profile</button>
                 </form>
+                <br>
+                <br>
+                <form action="client_page.php" method="post">
+                    <input type="hidden" name="page" value="notification">
+
+                    <button class="btn btn-menu-side" type="submit">
+                        Notification <?php echo $notification_count ?></button>
+                </form>
             </div>
         </div>
 
@@ -319,6 +332,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             } elseif ($active_page == 'profile') {
                 include 'profile.php';
+            } elseif ($active_page == 'notification') {
+                include 'client_notification.php';
             }
             ?>
 

@@ -13,8 +13,8 @@ $active_page = 'events';
 $latest_action = true;
 $status_id = 3;
 $ongoing_action = $completed_action = $rejected_action = $view_event = $sub_task_form = false;
-$add_funds_request = $edit_task = false;
-$event_action_error = $event_action_success = '';
+$add_funds_request = $edit_task = $delete_panel = false;
+$event_action_error = $event_action_success = $delete_message = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // change active pages
@@ -232,6 +232,148 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sub_task_form = false;
         }
     }
+
+    // admin clients module action
+    if (isset($_POST['delete_client'])) {
+        $action = $_POST['delete_client'];
+        $user_id = $_POST['user_id'];
+
+        if ($action == 'show_panel') {
+            $active_page = 'clients';
+            $delete_panel = true;
+
+            $userSql = "SELECT * FROM users WHERE id='$user_id'";
+
+            $user_data = mysqli_query($conn, $userSql);
+            $user_details = mysqli_fetch_row($user_data);
+        } elseif ($action == 'cancel_delete') {
+            $active_page = 'clients';
+            $delete_panel = false;
+            $delete_message = "Client Delete action canceled";
+        } elseif ($action == 'delete_client') {
+            $active_page = 'clients';
+            $delete_panel = false;
+            $deleted_date = date("Y/m/d"); // today's date
+
+            $sqlDel = "UPDATE users SET deleted_at = '$deleted_date' WHERE id='$user_id'";
+
+            if (mysqli_query($conn, $sqlDel)) {
+                $delete_message = "Client Delete action success";
+            } else {
+                $delete_message = "Something went wrong. Please try again later.";
+            }
+        }
+
+    }
+
+    // profile actions
+    if (isset($_POST['show_edit_profile'])) { // show edit profile page
+        $edit_profile = true;
+        $active_page = "profile";
+
+    } elseif (isset($_POST['show_edit_password'])) { // show edit password page
+        $edit_password = true;
+        $active_page = "profile";
+
+    } elseif (isset($_POST['show_delete_account'])) { // show delete account page
+        $delete_account = true;
+        $active_page = "profile";
+
+    } elseif (isset($_POST['cancel_delete_account'])) { // cancel delete account page
+        $delete_account = false;
+        $active_page = "profile";
+
+    } elseif (isset($_POST['edit_profile_details'])) { // edit profile
+        $user_id = $_POST['user_id'];
+        $fname = $_POST['firstname'];
+        $lname = $_POST['lastname'];
+        $mail = $_POST['email'];
+        $phone = $_POST['phone'];
+
+        $sql = "UPDATE users SET first_name = '$fname', last_name = '$lname', email = '$mail', phone = '$phone' WHERE id='$user_id'";
+
+        if (mysqli_query($conn, $sql)) {
+            $edit_profile = false;
+            $active_page = "profile";
+            $success_message = "Profile Details updates successfully";
+
+        } else {
+            $edit_profile = true;
+            $active_page = "profile";
+            $delete_error = "Something went wrong. Please try again later.";
+        }
+    } elseif (isset($_POST['edit_profile_password'])) { //edit password
+        $user_id = $_POST['user_id'];
+        $p_pass = $_POST['password_previous'];
+        $n_pass = $_POST['password_new'];
+        $n_pass_conf = $_POST['password_new_confirm'];
+
+        $sql = "SELECT password FROM users WHERE id = '$user_id'";
+
+        if (strlen(trim($n_pass)) < 6 && strlen(trim($n_pass_conf)) < 6 && strlen(trim($p_pass)) < 6) {
+            $edit_password = true;
+            $active_page = "profile";
+            $delete_error = "The passwords provided are less than 6 characters.";
+
+        } elseif (empty($delete_error) && ($n_pass !== $n_pass_conf)) {
+            $edit_password = true;
+            $active_page = "profile";
+            $delete_error = "The new passwords don't match, try again.";
+
+        } else {
+
+            $new_pass = password_hash($n_pass, PASSWORD_DEFAULT);
+
+            if ($stmt = mysqli_prepare($conn, $sql)) {
+                if (mysqli_stmt_execute($stmt)) {
+                    mysqli_stmt_store_result($stmt);
+
+                    if (mysqli_stmt_num_rows($stmt) == 1) {
+                        mysqli_stmt_bind_result($stmt, $hashed_pass);
+
+                        if (mysqli_stmt_fetch($stmt)) {
+                            if (password_verify($p_pass, $hashed_pass)) {
+                                $sql = "UPDATE users SET password = '$new_pass' WHERE id='$user_id'";
+
+                                if (mysqli_query($conn, $sql)) {
+                                    $active_page = "profile";
+                                    $edit_password = false;
+                                    $success_message = "Profile Password updates successfully";
+
+                                } else {
+                                    $active_page = "profile";
+                                    $edit_password = true;
+                                    $delete_error = "Something went wrong. Please try again later.";
+                                }
+                            } else {
+                                $edit_password = true;
+                                $active_page = "profile";
+                                $delete_error = "Password doesn't match. Try Again.";
+                            }
+                        }
+                    }
+                } else {
+                    $edit_password = true;
+                    $active_page = "profile";
+                    $delete_error = "cjui.";
+                }
+            }
+        }
+    } elseif (isset($_POST['delete_account'])) { // delete account
+        $user_id = $_POST['user_id'];
+        $deleted_date = date("Y/m/d"); // today's date
+
+        $sql = "UPDATE users SET deleted_at = '$deleted_date' WHERE id='$user_id'";
+
+        if (mysqli_query($conn, $sql)) {
+            $_SESSION = array();
+            session_destroy();
+
+            header("location: ../index.php");
+        } else {
+            $delete_error = "Something went wrong. Please try again later.";
+        }
+    }
 }
 
 ?>
@@ -299,13 +441,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <div class="main-content">
-            <?php if ($active_page == 'events') { ?>
-                <?php include "events.php"; ?>
-            <?php } elseif ($active_page == 'clients') { ?>
-                <h2>Clients Section</h2>
-            <?php } elseif ($active_page == 'profile') { ?>
-                <h2>Profile Page</h2>
-            <?php } ?>
+            <?php if ($active_page == 'events') {
+                include "events.php";
+            } elseif ($active_page == 'clients') {
+                include "clients.php";
+            } elseif ($active_page == 'profile') {
+                include "profile.php";
+            } ?>
         </div>
     </div>
 </div>
