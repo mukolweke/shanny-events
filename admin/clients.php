@@ -94,7 +94,7 @@ $clients_data = mysqli_query($conn, $sql);
                             <input type="hidden" name="delete_client" value="cancel_delete">
 
                             <button name="submit" type="submit" id="contact-submit" class="cancel_form_btn"
-                                    data-submit="...Sending">Cancel
+                                    data-submit="...Sending">NO
                             </button>
                         </form>
 
@@ -103,7 +103,7 @@ $clients_data = mysqli_query($conn, $sql);
                             <input type="hidden" name="delete_client" value="delete_client">
 
                             <button name="submit" type="submit" id="contact-submit" class="delete_form_btn"
-                                    data-submit="...Sending">Delete
+                                    data-submit="...Sending">YES
                             </button>
                         </form>
                     </div>

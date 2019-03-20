@@ -13,7 +13,7 @@ $active_page = 'events';
 $latest_action = true;
 $status_id = 3;
 $ongoing_action = $completed_action = $rejected_action = $view_event = $sub_task_form = false;
-$add_funds_request = $edit_task = $delete_panel = false;
+$add_funds_request = $edit_task = $delete_panel = $event_sub_task = false;
 $event_action_error = $event_action_success = $delete_message = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -220,7 +220,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $sub_task_form = false;
                 $event_action_error = "Notification not sent...";
             }
-        } else if ($event_task_action == 'show_edit_task') {
+        } else if ($event_task_action == 'show_del_sub_task') {
             $active_page = 'events';
             $latest_action = $completed_action = $rejected_action = false;
             $ongoing_action = true;
@@ -230,6 +230,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $task_id = $_POST['task_id'];
             $edit_task = true;
             $sub_task_form = false;
+        } else if ($event_task_action == 'cancel_sub_task_delete') {
+            $active_page = 'events';
+            $latest_action = $completed_action = $rejected_action = false;
+            $ongoing_action = true;
+            $status_id = 2;
+            $view_event = true;
+            $event_id = $_POST['event_id'];
+            $edit_task = false;
+            $sub_task_form = false;
+            $event_action_success = 'Delete process canceled';
+        } else if ($event_task_action == 'sub_task_delete') {
+            $active_page = 'events';
+            $latest_action = $completed_action = $rejected_action = false;
+            $ongoing_action = true;
+            $status_id = 2;
+            $view_event = true;
+            $event_id = $_POST['event_id'];
+            $sub_task_id = $_POST['sub_task_id'];
+            $edit_task = false;
+            $sub_task_form = false;
+
+
+            $deleted_date = date("Y/m/d"); // today's date
+
+            $sqlDel = "UPDATE events_task SET deleted_at = '$deleted_date' WHERE id='$sub_task_id'";
+
+            if (mysqli_query($conn, $sqlDel)) {
+                $event_action_success = 'Delete process success';
+            } else {
+                $event_action_error = "Something went wrong. Please try again later.";
+            }
         }
     }
 

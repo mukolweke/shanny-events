@@ -30,17 +30,21 @@ $sql = "SELECT * FROM events_task WHERE event_id = '$id' AND deleted_at IS NULL 
 $events_task_data = mysqli_query($conn, $sql);
 
 $sum = 0;
+$event_balance = 0;
 
 function setSum($value)
 {
     global $sum;
 
-    return $sum += $value;
+    $sum += $value;
 }
 
-echo $sum;
+function getBalance($val)
+{
+    global $total_cost;
 
-$event_balance = $total_cost - $sum;
+    return $total_cost - $val;
+}
 
 ?>
 
@@ -70,13 +74,8 @@ $event_balance = $total_cost - $sum;
             </tr>
 
             <tr>
-                <td>Budget</td>
-                <td><?php echo $total_cost ?> Ksh</td>
-            </tr>
-
-            <tr>
-                <td>Current Balance</td>
-                <td><?php echo $event_balance ?> Ksh</td>
+                <td>Original Budget</td>
+                <td><?php echo $total_cost ?> KES</td>
             </tr>
 
             <tr>
@@ -150,54 +149,7 @@ $event_balance = $total_cost - $sum;
 
         <h3>Event Sub Tasks</h3>
 
-        <?php
-
-        if (mysqli_num_rows($events_task_data) > 0) { ?>
-            <div>
-                <!--table to list all the sub-task-->
-                <table style="width:100%">
-                    <tr>
-                        <th class="">Name</th>
-                        <th class="">Description</th>
-                        <th class="">Cost</th>
-                        <th class="">Actions</th>
-                    </tr>
-
-                    <?php while ($row = mysqli_fetch_array($events_task_data)) { ?>
-                        <tr>
-                            <td><?php echo $row['name']; ?></td>
-                            <td><?php echo $row['description']; ?></td>
-                            <td><?php echo $row['cost']; ?></td>
-                            <td style="display: none;"><?php setSum($row['cost']) ?></td>
-                            <td>
-                                <form action="" method="post">
-                                    <input type="hidden" value="<?php echo $row['id']; ?>" name="task_id"/>
-                                    <input type="hidden" name="event_id" value="<?php echo $id; ?>">
-
-                                    <input type="hidden" name="event_sub_task_actions" value="show_edit_task">
-
-                                    <button class="btn btn-edit">Edit</button>
-                                </form>
-                            </td>
-                        </tr>
-                        <?php
-                    } ?>
-
-                    <tr>
-                        <th>Total</th>
-                        <th></th>
-                        <th><?php echo $sum; ?></th>
-                        <th></th>
-                    </tr>
-                </table>
-            </div>
-        <?php } else { ?>
-
-            <p>No Sub-Tasks available</p>
-
-        <?php } ?>
-
-        <?php if ($sub_task_form) { ?>
+        <?php if ($sub_task_form && !$event_sub_task) { ?>
             <div>
                 <!-- form to add the tasks -->
                 <form id="edit_form" action="../admin/admin_page.php" method="post">
@@ -205,19 +157,18 @@ $event_balance = $total_cost - $sum;
 
                     <div class="edit-form-group">
                         <label for="name">Name</label>
-                        <input value="" type="text" tabindex="3" id="name" name="name"
+                        <input type="text" tabindex="3" id="name" name="name"
                                required/>
                     </div>
 
                     <div class="edit-form-group">
-                        <label for="description">Description</label>
-                        <textarea rows="5" id="description" name="description"
-                                  required></textarea>
+                        <label for="cost">Cost</label>
+                        <input type="number" tabindex="3" id="cost" name="cost" required>
                     </div>
 
                     <div class="edit-form-group">
-                        <label for="cost">Cost</label>
-                        <input value="" type="number" tabindex="3" id="cost" name="cost" required>
+                        <label for="description">Description</label>
+                        <input type="text" tabindex="3" id="description" name="description" required>
                     </div>
 
                     <input type="hidden" name="event_id" value="<?php echo $id; ?>">
@@ -231,33 +182,87 @@ $event_balance = $total_cost - $sum;
                     </div>
                 </form>
             </div>
-        <?php } ?>
+        <?php } else { ?>
 
-        <?php if ($edit_task) { ?>
-            <h3>Edit SubTask</h3>
+            <?php
 
-            <table cellspacing="0" cellpadding="0">
-                <tr>
-                    <td>Name</td>
-                    <td><?php echo $name ?></td>
-                </tr>
+            if (mysqli_num_rows($events_task_data) > 0) { ?>
+                <div>
+                    <!--table to list all the sub-task-->
+                    <table style="width:100%">
+                        <tr>
+                            <th class="">Name</th>
+                            <th class="">Description</th>
+                            <th class="">Cost (KES)</th>
+                            <th class="">Budget Bal (KES)</th>
+                            <th class="">Actions</th>
+                        </tr>
 
-                <tr>
-                    <td>Description</td>
-                    <td><?php echo $location ?></td>
-                </tr>
+                        <?php while ($row = mysqli_fetch_array($events_task_data)) { ?>
+                            <tr>
+                                <td><?php echo $row['name']; ?></td>
+                                <td><?php echo $row['description']; ?></td>
+                                <td><?php echo $row['cost']; ?></td>
+                                <td style="display: none;"><?php setSum($row['cost']) ?></td>
+                                <td>-</td>
+                                <td>
+                                    <form action="" method="post">
+                                        <input type="hidden" value="<?php echo $row['id']; ?>" name="task_id"/>
+                                        <input type="hidden" name="event_id" value="<?php echo $id; ?>">
 
-                <tr>
-                    <td>Cost</td>
-                    <td><?php echo $date ?></td>
-                </tr>
+                                        <input type="hidden" name="event_sub_task_actions" value="show_del_sub_task">
 
-                <tr>
-                    <td></td>
-                    <td><?php echo $people_count ?></td>
-                </tr>
+                                        <button class="btn btn-delete">DELETE</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php
+                        } ?>
 
-            </table>
+                        <tr>
+                            <th>Total</th>
+                            <th></th>
+                            <th><?php echo $sum; ?></th>
+                            <th><?php echo getBalance($sum) ?></th>
+                            <th></th>
+                        </tr>
+                    </table>
+                </div>
+            <?php } else { ?>
+
+                <p>No Sub-Tasks available</p>
+
+            <?php }
+        } ?>
+
+        <?php if ($edit_task && !$event_sub_task) { ?>
+            <h3>DELETE SUBTASK</h3>
+
+            <br>
+
+            <p>Are you sure as this will delete the subtask and affect Budget</p>
+
+            <div class="edit-form-group">
+
+                <form action="" method="post" style="float: left;width: 50%;">
+                    <input type="hidden" name="event_sub_task_actions" value="cancel_sub_task_delete">
+                    <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+
+                    <button name="submit" type="submit" id="contact-submit" class="cancel_form_btn"
+                            data-submit="...Sending">NO
+                    </button>
+                </form>
+
+                <form action="" method="post" style="float: left;width: 50%;">
+                    <input type="hidden" name="event_sub_task_actions" value="sub_task_delete">
+                    <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+                    <input type="hidden" name="sub_task_id" value="<?php echo $sub_task_id; ?>">
+
+                    <button name="submit" type="submit" id="contact-submit" class="delete_form_btn"
+                            data-submit="...Sending">YES
+                    </button>
+                </form>
+            </div>
         <?php } ?>
 
     <?php } ?>
