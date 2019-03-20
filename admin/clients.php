@@ -28,39 +28,52 @@ $clients_data = mysqli_query($conn, $sql);
     <div>
         <h3>Clients List</h3>
 
+        <div class="btn">
+            <form action="../backend/export.php" method="post">
+                <input type="hidden" name="export_action" value="export_clients">
+
+                <button type="submit" id="btnExport" name='export_clients'
+                        value="Export to Excel" class="btn btn-success">Export to
+                    excel
+                </button>
+            </form>
+        </div>
+
         <br>
 
         <p style="color: green"><?php echo $delete_message; ?></p>
 
-        <table style="width:100%">
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Events Requests</th>
-                <th>Action</th>
-            </tr>
-
-            <?php while ($array = mysqli_fetch_row($clients_data)) { ?>
+        <div>
+            <table style="width:100%">
                 <tr>
-                    <td class=""><?php echo $array[1] . ' ' . $array[2]; ?></td>
-                    <td class=""><?php echo $array[3]; ?></td>
-                    <td class=""><?php echo $array[4]; ?></td>
-                    <td class=""><?php getUserEventsCount($array[0]); ?></td>
-                    <td class=" action-btns">
-                        <form action="../admin/admin_page.php" method="post">
-                            <input type="hidden" name="delete_client" value="show_panel">
-
-                            <input type="hidden" name="user_id" value="<?php echo $array[0]; ?>">
-
-                            <button class="btn btn-delete">Delete</button>
-                        </form>
-                    </td>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>No. of Events</th>
+                    <th>Action</th>
                 </tr>
-            <?php }; ?>
 
-        </table>
+                <?php while ($array = mysqli_fetch_array($clients_data)) { ?>
+                    <tr>
+                        <td class=""><?php echo $array['first_name'] . ' ' . $array['last_name']; ?></td>
+                        <td class=""><?php echo $array['email']; ?></td>
+                        <td class=""><?php echo $array['phone']; ?></td>
+                        <td class=""><?php getUserEventsCount($array['id']); ?></td>
+                        <td class=" action-btns">
+                            <form action="../admin/admin_page.php" method="post">
+                                <input type="hidden" name="delete_client" value="show_panel">
 
+                                <input type="hidden" name="user_id" value="<?php echo $array['id']; ?>">
+
+                                <button class="btn btn-delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php }; ?>
+
+            </table>
+
+        </div>
 
         <br>
 

@@ -17,7 +17,7 @@ $add_funds_request = $edit_task = $delete_panel = false;
 $event_action_error = $event_action_success = $delete_message = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // change active pages
+// change active pages
     if (isset($_POST['page'])) {
         $page = $_POST['page'];
 
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // admin page actions
+// admin page actions
     if (isset($_POST['admin_page_action'])) {
         $action = $_POST['admin_page_action'];
 
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // view event
+// view event
     if (isset($_POST['view_event'])) {
         $active_page = 'events';
         $view_event = true;
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // view_event_action
+// view_event_action
     if (isset($_POST['view_event_action'])) {
         $action = $_POST['view_event_action'];
         $event_id = $_POST['event_id'];
@@ -140,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // sub-task actions
+// sub-task actions
     if (isset($_POST['event_sub_task_actions'])) {
         $event_task_action = $_POST['event_sub_task_actions'];
 
@@ -233,7 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // admin clients module action
+// admin clients module action
     if (isset($_POST['delete_client'])) {
         $action = $_POST['delete_client'];
         $user_id = $_POST['user_id'];
@@ -266,7 +266,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     }
 
-    // profile actions
+// profile actions
     if (isset($_POST['show_edit_profile'])) { // show edit profile page
         $edit_profile = true;
         $active_page = "profile";
@@ -374,6 +374,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $delete_error = "Something went wrong. Please try again later.";
         }
     }
+
+
+//export actions
+    if (isset($_POST['export_action'])) {
+        $action = $_POST['export_action'];
+        $output = '';
+
+        if ($action == 'export_clients') {
+            $active_page = 'clients';
+
+            $sqlClients = "SELECT * FROM users WHERE user_type = 2 AND deleted_at IS NULL OR deleted_at = ''";
+
+            $clientsResult = mysqli_query($conn, $sqlClients);
+
+            if (mysqli_num_rows($clientsResult) > 0) {
+                $output .= '
+                       <table class="table" bordered="1">  
+                                        <tr>  
+                                             <th>Full Name</th>  
+                                             <th>Email</th>  
+                                             <th>Phone</th>
+                                        </tr>
+                      ';
+                while ($row = mysqli_fetch_array($clientsResult)) {
+                    $output .= '
+                        <tr>  
+                                             <td>' . $row["first_name"] . ' ' . $row["last_name"] . '</td>  
+                                             <td>' . $row["email"] . '</td>  
+                                             <td>' . $row["phone"] . '</td>  
+                                        </tr>
+                       ';
+                }
+                $output .= '</table>';
+                header('Content-Type: application/xls');
+                header('Content-Disposition: attachment; filename=download_clients.xls');
+                echo $output;
+            }
+        }
+    }
 }
 
 ?>
@@ -386,6 +425,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </title>
 
     <link rel="stylesheet" href="../styles/main.css">
+
 </head>
 <body>
 <div class="topnav">
