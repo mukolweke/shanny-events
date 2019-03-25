@@ -140,11 +140,11 @@ p {
 }
 
 .backdrop {
-    background: black url(/styles/img/banner1.jpg) no-repeat;
+    background: black url(./styles/img/banner1.jpg) no-repeat;
     background-size: cover;
     /*position: relative;*/
     height: 550px;
-    width: 100%;
+    width: 200%;
 }
 
 .banner-text {
