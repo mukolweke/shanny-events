@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9bb8bce7-27d9-402f-a9f1-79e2a89cb369" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/admin_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/admin_page.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/partials/lists_events.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/partials/lists_events.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/partials/view_event.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/partials/view_event.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/export.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/export.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/backend/export.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="32" selection-start-line="32" selection-end-line="32" />
+            <state relative-caret-position="330">
+              <caret line="22" column="57" lean-forward="true" selection-start-line="22" selection-start-column="57" selection-end-line="22" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -75,11 +71,9 @@
   <component name="PhpServers">
     <servers />
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="40" />
-    <option name="y" value="23" />
-    <option name="width" value="1640" />
-    <option name="height" value="1027" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="width" value="1680" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -156,12 +150,12 @@
       <workItem from="1552968518710" duration="11000" />
       <workItem from="1553076361502" duration="6991000" />
       <workItem from="1553531921713" duration="746000" />
-      <workItem from="1553602190182" duration="3628000" />
+      <workItem from="1553602190182" duration="3814000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30205000" />
+    <option name="totallyTimeSpent" value="30391000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="40" y="23" width="1640" height="1027" extended-state="0" />
@@ -307,8 +301,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/export.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
+        <state relative-caret-position="330">
+          <caret line="22" column="57" lean-forward="true" selection-start-line="22" selection-start-column="57" selection-end-line="22" selection-end-column="57" />
         </state>
       </provider>
     </entry>
