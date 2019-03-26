@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $status_id = 1;
                 $event_action_error = "Something went wrong. Please try again later.";
             }
-        } elseif ($action == 'reject') {
+        } else if ($action == 'reject') {
             $sql = "UPDATE events SET status = 4 WHERE id = '$event_id'";
 
             if (mysqli_query($conn, $sql)) {
@@ -113,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $status_id = 1;
                 $event_action_error = "Something went wrong. Please try again later.";
             }
-        } elseif ($action == 'done') {
+        } else if ($action == 'done') {
             $sql = "UPDATE events SET status = 1 WHERE id = '$event_id'";
 
             if (mysqli_query($conn, $sql)) {
@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $status_id = 2;
                 $event_action_error = "Something went wrong. Please try again later.";
             }
-        } elseif ($action = 'view_sub_task') {
+        } else if ($action = 'view_sub_task') {
             $active_page = 'events';
             $latest_action = $completed_action = $rejected_action = false;
             $ongoing_action = true;
@@ -295,6 +295,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
+    }
+
+    // completed actions
+    if (isset($_POST['completed_action'])) {
+        $completed_action = $_POST['completed_action'];
+
+        if ($completed_action == 'view_sub_task') {
+            $active_page = 'events';
+            $latest_action = $ongoing_action = $rejected_action = false;
+            $completed_action = true;
+            $status_id = 1;
+            $view_event = true;
+            $event_id = $_POST['event_id'];
+            $sub_task_form = false;
+            $event_sub_task = true;
+        }
     }
 
 // profile actions
