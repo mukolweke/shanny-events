@@ -48,10 +48,6 @@ $user_login = new Auth();
         <h1>Shanny's Events</h1>
         <p>We do events that will make awesome memories</p>
         <a href="auth/login.php" class="btn banner-btn">Hire me</a>
-<<<<<<< HEAD
-
-=======
->>>>>>> 0e05ac2aa989b2457c2dc7e1bc2ba1dcceac932a
     </div>
 </div>
 
