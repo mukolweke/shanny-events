@@ -3,21 +3,18 @@ $success_message = $delete_error = '';
 
 global  $edit_profile, $edit_password, $delete_account;
 
-require_once "../backend/connect.php";
+require_once "../backend/auth.php";
 
-$user_id = $_SESSION['id'];
+$admin = new Auth();
 
-$sql = "SELECT * FROM users WHERE id = '$user_id'";
+$details = $admin->getClientInformation($_SESSION['id']);
 
-$data = mysqli_query($conn, $sql);
-
-$details = mysqli_fetch_row($data);
-
-$firstname = $details[1];
-$lastname = $details[2];
-$email = $details[3];
-$phone = $details[4];
-$password = $details[5];
+$user_id = $details['id'];
+$firstname = $details['first_name'];
+$lastname = $details['last_name'];
+$email = $details['email'];
+$phone = $details['phone'];
+$password = $details['password'];
 ?>
 
 <div class="profile-page">

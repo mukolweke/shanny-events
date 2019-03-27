@@ -1,14 +1,17 @@
 <?php
-// Initialize the session
+
 session_start();
 
-// Unset all of the session variables
-$_SESSION = array();
+require_once '../backend/auth.php';
+$user = new Auth();
 
-// Destroy the session.
-session_destroy();
+if (!$user->is_logged_in()) {
+    $user->redirect('../index.php');
+}
 
-// Redirect to login page
-header("location: ../index.php");
-exit;
+if ($user->is_logged_in() != "") {
+    $user->logout();
+    $user->redirect('../index.php');
+}
+
 ?>

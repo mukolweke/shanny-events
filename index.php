@@ -1,6 +1,9 @@
 <?php
-
 session_start();
+
+require_once 'backend/auth.php';
+
+$user_login = new Auth();
 
 ?>
 

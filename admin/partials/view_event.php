@@ -12,6 +12,7 @@ $people_count = $event_details[4];
 $total_cost = $event_details[5];
 $user_id = $event_details[6];
 $status_id = $event_details[10];
+$total_bal = intval($event_details[11]);
 
 // get the user details: name
 $sqlUser = "SELECT * FROM users WHERE id = '$user_id'";
@@ -37,13 +38,19 @@ function setSum($value)
     global $sum;
 
     $sum += $value;
+
+    updateBalance($sum);
 }
 
-function getBalance($val)
+function updateBalance($val)
 {
-    global $total_cost;
+    global $id, $conn, $total_cost;
 
-    return $total_cost - $val;
+    $event_balance = $total_cost - $val;
+
+    $sqlBal = "UPDATE events SET total_bal = '$event_balance' WHERE id='$id'";
+
+    mysqli_query($conn, $sqlBal);
 }
 
 ?>
@@ -75,7 +82,12 @@ function getBalance($val)
 
             <tr>
                 <td>Original Budget</td>
-                <td><?php echo $total_cost ?> KES</td>
+                <td>KES <?php echo $total_cost ?></td>
+            </tr>
+
+            <tr>
+                <td>Budget Balance</td>
+                <td>KES <?php echo $total_bal ?></td>
             </tr>
 
             <tr>
@@ -120,16 +132,27 @@ function getBalance($val)
                                     <button class="btn btn-primary">Request Funds</button>
                                 </form>
                             <?php } ?>
+                            <?php if ($total_bal != 0) { ?>
+                                <form action="" method="post">
+                                    <input type="hidden" name="event_sub_task_actions" value="request_add_funds">
+
+                                    <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+                                    <input type="hidden" name="client_id" value="<?php echo $user_id; ?>">
+
+                                    <button class="btn btn-primary">Print Events Expenditure</button>
+                                </form>
+                            <?php } ?>
+
                             <form action="" method="post">
                                 <input type="hidden" name="view_event_action" value="done">
 
                                 <input type="hidden" name="event_id" value="<?php echo $id; ?>">
 
-                                <button class="btn btn-success">Done</button>
+                                <button class="btn btn-success">Event Completed</button>
                             </form>
                         <?php } elseif ($status_id == 1) { ?>
                             <form action="" method="post">
-                                <input type="hidden" name="view_event_action" value="view_sub_task">
+                                <input type="hidden" name="completed_action" value="view_sub_task">
 
                                 <input type="hidden" name="event_id" value="<?php echo $id; ?>">
 
@@ -194,7 +217,6 @@ function getBalance($val)
                             <th class="">Name</th>
                             <th class="">Description</th>
                             <th class="">Cost (KES)</th>
-                            <th class="">Budget Bal (KES)</th>
                             <th class="">Actions</th>
                         </tr>
 
@@ -204,7 +226,6 @@ function getBalance($val)
                                 <td><?php echo $row['description']; ?></td>
                                 <td><?php echo $row['cost']; ?></td>
                                 <td style="display: none;"><?php setSum($row['cost']) ?></td>
-                                <td>-</td>
                                 <td>
                                     <form action="" method="post">
                                         <input type="hidden" value="<?php echo $row['id']; ?>" name="task_id"/>
@@ -223,7 +244,56 @@ function getBalance($val)
                             <th>Total</th>
                             <th></th>
                             <th><?php echo $sum; ?></th>
-                            <th><?php echo getBalance($sum) ?></th>
+                            <th></th>
+                        </tr>
+                    </table>
+                </div>
+            <?php } else { ?>
+
+                <p>No Sub-Tasks available</p>
+
+            <?php }
+        } ?>
+
+        <!--only for ongoing events-->
+        <?php if ($status_id == 1) { ?>
+            <?php
+
+            if (mysqli_num_rows($events_task_data) > 0) { ?>
+                <div>
+                    <!--table to list all the sub-task-->
+                    <table style="width:100%">
+                        <tr>
+                            <th class="">Name</th>
+                            <th class="">Description</th>
+                            <th class="">Cost (KES)</th>
+                            <th class="">Actions</th>
+                        </tr>
+
+                        <?php while ($row = mysqli_fetch_array($events_task_data)) { ?>
+                            <tr>
+                                <td><?php echo $row['name']; ?></td>
+                                <td><?php echo $row['description']; ?></td>
+                                <td><?php echo $row['cost']; ?></td>
+                                <td style="display: none;"><?php setSum($row['cost']) ?></td>
+                                <td>
+                                    <form action="" method="post">
+                                        <input type="hidden" value="<?php echo $row['id']; ?>" name="task_id"/>
+                                        <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+
+                                        <input type="hidden" name="event_sub_task_actions" value="show_del_sub_task">
+
+                                        <button class="btn btn-delete">DELETE</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php
+                        } ?>
+
+                        <tr>
+                            <th>Total</th>
+                            <th></th>
+                            <th><?php echo $sum; ?></th>
                             <th></th>
                         </tr>
                     </table>
