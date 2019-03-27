@@ -1,12 +1,10 @@
 <?php
 
-require_once('../backend/connect.php');
+require_once('../backend/auth.php');
 
-$user_id = $_SESSION['id'];
+$logged_user= new Auth();
 
-$sql = "SELECT * FROM events WHERE user_id = '$user_id' AND deleted_at IS NULL OR deleted_at = ''";
-
-$data = mysqli_query($conn, $sql);
+$data = $logged_user->getAllEvents($_SESSION['id']);
 
 ?>
 
@@ -26,19 +24,19 @@ $data = mysqli_query($conn, $sql);
             <th class="">Actions</th>
         </tr>
 
-        <?php while ($array = mysqli_fetch_row($data)) { ?>
+        <?php foreach ($data as $array) { ?>
             <tr>
-                <td class=""><?php echo $array[1]; ?></td>
-                <td class=""><?php echo $array[2]; ?></td>
-                <td class=""><?php echo $array[3]; ?></td>
-                <td class=""><?php echo $array[4]; ?></td>
-                <td class=""><?php echo $array[5]; ?></td>
-                <td class=""><?php echo $array[6]; ?></td>
+                <td class=""><?php echo $array['name']; ?></td>
+                <td class=""><?php echo $array['location']; ?></td>
+                <td class=""><?php echo $array['date']; ?></td>
+                <td class=""><?php echo $array['people_count']; ?></td>
+                <td class=""><?php echo $array['total_cost']; ?></td>
+                <td class=""><?php echo $array['status']; ?></td>
                 <td class=" action-btns">
                     <form action="client_page.php" method="post">
                         <input type="hidden" name="event_delete" value="delete">
 
-                        <input type="hidden" name="event_id" value="<?php echo $array[0]; ?>">
+                        <input type="hidden" name="event_id" value="<?php echo $array['id']; ?>">
 
                         <button class="btn btn-delete">Delete</button>
                     </form>
@@ -46,7 +44,7 @@ $data = mysqli_query($conn, $sql);
                     <form action="client_page.php" method="post">
                         <input type="hidden" name="event_edit" value="edit">
 
-                        <input type="hidden" name="event_id" value="<?php echo $array[0]; ?>">
+                        <input type="hidden" name="event_id" value="<?php echo $array['id']; ?>">
 
                         <button class="btn btn-edit">Edit</button>
                     </form>
@@ -55,7 +53,3 @@ $data = mysqli_query($conn, $sql);
         <?php }; ?>
     </table>
 </div>
-
-<?php mysqli_free_result($data); ?>
-<?php mysqli_close($conn); ?>
-

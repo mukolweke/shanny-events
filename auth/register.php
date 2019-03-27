@@ -1,8 +1,20 @@
 <?php
+session_start();
 
-require_once('../backend/connect.php');
+require_once('../backend/auth.php');
 
-$first_name = $last_name = $email = $phone = $password = $confirm_password = $form_error  = "";
+$reg_user = new Auth();
+
+if ($reg_user->is_logged_in()) {
+    if ($_SESSION['user_type'] == 1) {
+        $reg_user->redirect('../admin/admin_page.php');
+    } else {
+        $reg_user->redirect('../client/client_page.php');
+    }
+}
+
+
+$first_name = $last_name = $email = $phone = $password = $confirm_password = $form_error = "";
 $first_name_err = $last_name_err = $email_err = $phone_err = $password_err = $confirm_password_err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -17,35 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         && empty(trim($_POST["confirm_password"]))
     ) {
         $form_error = "Please fill the form before submitting.";
-    } else {
-        $sql = "SELECT id FROM users WHERE email = ?";
-
-        if ($stmt = mysqli_prepare($conn, $sql)) {
-
-            mysqli_stmt_bind_param($stmt, "s", $check_email);
-
-            $check_email = trim($_POST["email"]);
-
-            if (mysqli_stmt_execute($stmt)) {
-
-                mysqli_stmt_store_result($stmt);
-
-                if (mysqli_stmt_num_rows($stmt) == 1) {
-                    $email_err = "This user email provided already exists.";
-                } else {
-                    $first_name = trim($_POST["first_name"]);
-                    $last_name = trim($_POST["last_name"]);
-                    $email = trim($_POST["email"]);
-                    $phone = trim($_POST["phone"]);
-                }
-            } else {
-                $form_error = "Oops! Something went wrong. Please try again later.";
-            }
-        }
-
-        mysqli_stmt_close($stmt);
     }
-
     // Validate Password
     if (strlen(trim($_POST["password"])) < 6) {
         $password_err = "Password must have at least 6 characters.";
@@ -71,41 +55,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         empty($password_err) &&
         empty($confirm_password_err)
     ) {
-        $sql = "INSERT INTO users (first_name, last_name, email, phone, password, user_type) VALUES (?, ?, ?, ?, ?, ?)";
 
-        if ($stmt = mysqli_prepare($conn, $sql)) {
+        $email = $_POST["email"];
 
-            mysqli_stmt_bind_param(
-                $stmt,
-                "sssssi",
-                $param_f_name,
-                $param_l_name,
-                $param_email,
-                $param_phone,
-                $param_password,
-                $param_u_type
-            );
+        $stmt = $reg_user->runQuery("SELECT * FROM users WHERE email = '$email'");
 
-            // Set parameters
-            $param_f_name = $first_name;
-            $param_l_name = $last_name;
-            $param_email = $email;
-            $param_phone = $phone;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-            $param_u_type = 2; // customer user
+        mysqli_stmt_execute($stmt);
 
-            if (mysqli_stmt_execute($stmt)) {
-                // Success Redirect to login page
-                header("location: login.php");
-            } else {
-                $form_error = "Something went wrong. Please try again later.";
-            }
+        mysqli_stmt_store_result($stmt);
+
+        if (mysqli_stmt_num_rows($stmt) == 1) {
+            $email_err = "This user email provided already exists.";
+        } else {
+            $first_name = trim($_POST["first_name"]);
+            $last_name = trim($_POST["last_name"]);
+            $email = trim($_POST["email"]);
+            $phone = trim($_POST["phone"]);
+            $pass = $param_password = password_hash($password, PASSWORD_DEFAULT);
+
+            $reg_user->register($first_name, $last_name, $email, $phone, $pass, 2);
         }
-
-        mysqli_stmt_close($stmt);
     }
-
-    mysqli_close($conn);
 }
 ?>
 

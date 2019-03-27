@@ -1,12 +1,16 @@
 <?php
 session_start();
 
-require_once "../backend/connect.php";
+require_once '../backend/auth.php';
 
-// Check if the user is logged in;
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: ../auth/login.php");
-    exit;
+$logged_user = new Auth();
+
+if (!$logged_user->is_logged_in()) {
+    $logged_user->redirect('../index.php');
+} else {
+    if ($_SESSION['user_type'] == 1) {
+        $logged_user->redirect('../admin/admin_page.php');
+    }
 }
 
 $active_page = 'events';
@@ -156,9 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail = $_POST['email'];
         $phone = $_POST['phone'];
 
-        $sql = "UPDATE users SET first_name = '$fname', last_name = '$lname', email = '$mail', phone = '$phone' WHERE id='$user_id'";
-
-        if (mysqli_query($conn, $sql)) {
+        if ($logged_user->editClientInformation($user_id, $fname, $lname, $mail, $phone)) {
             $edit_profile = false;
             $active_page = "profile";
             $success_message = "Profile Details updates successfully";
@@ -174,7 +176,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $n_pass = $_POST['password_new'];
         $n_pass_conf = $_POST['password_new_confirm'];
 
-        $sql = "SELECT password FROM users WHERE id = '$user_id'";
 
         if (strlen(trim($n_pass)) < 6 && strlen(trim($n_pass_conf)) < 6 && strlen(trim($p_pass)) < 6) {
             $edit_password = true;
@@ -190,52 +191,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $new_pass = password_hash($n_pass, PASSWORD_DEFAULT);
 
-            if ($stmt = mysqli_prepare($conn, $sql)) {
-                if (mysqli_stmt_execute($stmt)) {
-                    mysqli_stmt_store_result($stmt);
-
-                    if (mysqli_stmt_num_rows($stmt) == 1) {
-                        mysqli_stmt_bind_result($stmt, $hashed_pass);
-
-                        if (mysqli_stmt_fetch($stmt)) {
-                            if (password_verify($p_pass, $hashed_pass)) {
-                                $sql = "UPDATE users SET password = '$new_pass' WHERE id='$user_id'";
-
-                                if (mysqli_query($conn, $sql)) {
-                                    $active_page = "profile";
-                                    $edit_password = false;
-                                    $success_message = "Profile Password updates successfully";
-
-                                } else {
-                                    $active_page = "profile";
-                                    $edit_password = true;
-                                    $delete_error = "Something went wrong. Please try again later.";
-                                }
-                            } else {
-                                $edit_password = true;
-                                $active_page = "profile";
-                                $delete_error = "Password doesn't match. Try Again.";
-                            }
-                        }
-                    }
-                } else {
-                    $edit_password = true;
-                    $active_page = "profile";
-                    $delete_error = "cjui.";
-                }
+            if ($logged_user->editUserPassword($user_id, $p_pass, $new_pass)) {
+                $active_page = "profile";
+                $edit_password = false;
+                $success_message = "Profile Password updates successfully";
+            } else {
+                $active_page = "profile";
+                $edit_password = true;
+                $delete_error = "Wrong Previous Password. Please try again later.";
             }
+
         }
     } elseif (isset($_POST['delete_account'])) { // delete account
-        $user_id = $_POST['user_id'];
-        $deleted_date = date("Y/m/d"); // today's date
 
-        $sql = "UPDATE users SET deleted_at = '$deleted_date' WHERE id='$user_id'";
-
-        if (mysqli_query($conn, $sql)) {
+        if ($logged_user->deleteAccount($_POST['user_id'])) {
             $_SESSION = array();
             session_destroy();
 
-            header("location: ../index.php");
+            $logged_user->redirect('../index.php');
+
         } else {
             $delete_error = "Something went wrong. Please try again later.";
         }
