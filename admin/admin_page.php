@@ -13,10 +13,11 @@ $active_page = 'events';
 $latest_action = true;
 $status_id = 3;
 $ongoing_action = $completed_action = $rejected_action = $view_event = $sub_task_form = false;
-$event_action_error = $event_action_success = '';
+$add_funds_request = $edit_task = $delete_panel = $event_sub_task = false;
+$event_action_error = $event_action_success = $delete_message = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // change active pages
+// change active pages
     if (isset($_POST['page'])) {
         $page = $_POST['page'];
 
@@ -29,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // admin page actions
+// admin page actions
     if (isset($_POST['admin_page_action'])) {
         $action = $_POST['admin_page_action'];
 
@@ -52,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // view event
+// view event
     if (isset($_POST['view_event'])) {
         $active_page = 'events';
         $view_event = true;
@@ -74,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // view_event_action
+// view_event_action
     if (isset($_POST['view_event_action'])) {
         $action = $_POST['view_event_action'];
         $event_id = $_POST['event_id'];
@@ -87,11 +88,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $active_page = 'events';
                 $completed_action = $ongoing_action = $rejected_action = false;
                 $latest_action = true;
+                $status_id = 1;
                 $event_action_success = "Event status successfully upgraded";
             } else {
                 $active_page = 'events';
                 $completed_action = $ongoing_action = $rejected_action = false;
                 $latest_action = true;
+                $status_id = 1;
                 $event_action_error = "Something went wrong. Please try again later.";
             }
         } elseif ($action == 'reject') {
@@ -101,11 +104,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $active_page = 'events';
                 $completed_action = $ongoing_action = $rejected_action = false;
                 $latest_action = true;
+                $status_id = 1;
                 $event_action_success = "Event status successfully rejected";
             } else {
                 $active_page = 'events';
                 $completed_action = $ongoing_action = $rejected_action = false;
                 $latest_action = true;
+                $status_id = 1;
                 $event_action_error = "Something went wrong. Please try again later.";
             }
         } elseif ($action == 'done') {
@@ -115,33 +120,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $active_page = 'events';
                 $latest_action = $completed_action = $rejected_action = false;
                 $ongoing_action = true;
+                $status_id = 2;
                 $event_action_success = "Event successfully marked done";
             } else {
                 $active_page = 'events';
                 $latest_action = $completed_action = $rejected_action = false;
                 $ongoing_action = true;
+                $status_id = 2;
                 $event_action_error = "Something went wrong. Please try again later.";
             }
         } elseif ($action = 'view_sub_task') {
             $active_page = 'events';
             $latest_action = $completed_action = $rejected_action = false;
             $ongoing_action = true;
+            $status_id = 2;
             $view_event = true;
             $event_id = $_POST['event_id'];
             $sub_task_form = true;
         }
     }
 
-    // sub-task actions
+// sub-task actions
     if (isset($_POST['event_sub_task_actions'])) {
-        $event_action = $_POST['event_sub_task_actions'];
+        $event_task_action = $_POST['event_sub_task_actions'];
 
-        if ($event_action == 'add_sub_task') {
+        if ($event_task_action == 'add_sub_task') {
             $name = $_POST['name'];
             $description = $_POST['description'];
             $cost = $_POST['cost'];
             $event = $_POST['event_id'];
-            $task_sum = $_POST['task_sum'];
+            $task_sum = $_POST['task_sum'] + $cost;
 
             $sqlEvent = "SELECT * FROM events WHERE id = '$event'";
             $event_data = mysqli_query($conn, $sqlEvent);
@@ -155,6 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $active_page = 'events';
                     $latest_action = $completed_action = $rejected_action = false;
                     $ongoing_action = true;
+                    $status_id = 2;
                     $view_event = true;
                     $event_id = $event;
                     $sub_task_form = false;
@@ -162,6 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } else {
                     $active_page = 'events';
                     $ongoing_action = true;
+                    $status_id = 2;
                     $latest_action = $completed_action = $rejected_action = false;
                     $view_event = true;
                     $event_id = $event;
@@ -170,14 +180,268 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             } else {
                 $active_page = 'events';
-                $ongoing_action = true;
                 $latest_action = $completed_action = $rejected_action = false;
+                $ongoing_action = true;
+                $status_id = 2;
                 $view_event = true;
                 $event_id = $event;
+                $add_funds_request = true;
                 $sub_task_form = false;
-                $event_action_error = "The Budget limit has reached. Please add budget to spend";
+                $event_action_error = "The Budget limit has reached. Please add or edit current budget to spend";
             }
 
+        } else if ($event_task_action == 'request_add_funds') {
+            $to = $_POST['client_id'];
+            $from = $_SESSION['id'];
+            $message = "Additional Funds requested for this event";
+            $event = $_POST['event_id'];
+
+
+            $sqlAddFunds = "INSERT INTO notifications (from_id, to_id, message, event, status) values ('$from', '$to', '$message', '$event', 1)";
+
+            if (mysqli_query($conn, $sqlAddFunds)) {
+                $active_page = 'events';
+                $latest_action = $completed_action = $rejected_action = false;
+                $ongoing_action = true;
+                $status_id = 2;
+                $view_event = true;
+                $event_id = $event;
+                $add_funds_request = false;
+                $sub_task_form = false;
+                $event_action_success = "Event Notification sent successfully to client";
+            } else {
+                $active_page = 'events';
+                $latest_action = $completed_action = $rejected_action = false;
+                $ongoing_action = true;
+                $status_id = 2;
+                $view_event = true;
+                $event_id = $event;
+                $add_funds_request = true;
+                $sub_task_form = false;
+                $event_action_error = "Notification not sent...";
+            }
+        } else if ($event_task_action == 'show_del_sub_task') {
+            $active_page = 'events';
+            $latest_action = $completed_action = $rejected_action = false;
+            $ongoing_action = true;
+            $status_id = 2;
+            $view_event = true;
+            $event_id = $_POST['event_id'];
+            $task_id = $_POST['task_id'];
+            $edit_task = true;
+            $sub_task_form = false;
+        } else if ($event_task_action == 'cancel_sub_task_delete') {
+            $active_page = 'events';
+            $latest_action = $completed_action = $rejected_action = false;
+            $ongoing_action = true;
+            $status_id = 2;
+            $view_event = true;
+            $event_id = $_POST['event_id'];
+            $edit_task = false;
+            $sub_task_form = false;
+            $event_action_success = 'Delete process canceled';
+        } else if ($event_task_action == 'sub_task_delete') {
+            $active_page = 'events';
+            $latest_action = $completed_action = $rejected_action = false;
+            $ongoing_action = true;
+            $status_id = 2;
+            $view_event = true;
+            $event_id = $_POST['event_id'];
+            $sub_task_id = $_POST['sub_task_id'];
+            $edit_task = false;
+            $sub_task_form = false;
+
+
+            $deleted_date = date("Y/m/d"); // today's date
+
+            $sqlDel = "UPDATE events_task SET deleted_at = '$deleted_date' WHERE id='$sub_task_id'";
+
+            if (mysqli_query($conn, $sqlDel)) {
+                $event_action_success = 'Delete process success';
+            } else {
+                $event_action_error = "Something went wrong. Please try again later.";
+            }
+        }
+    }
+
+// admin clients module action
+    if (isset($_POST['delete_client'])) {
+        $action = $_POST['delete_client'];
+        $user_id = $_POST['user_id'];
+
+        if ($action == 'show_panel') {
+            $active_page = 'clients';
+            $delete_panel = true;
+
+            $userSql = "SELECT * FROM users WHERE id='$user_id'";
+
+            $user_data = mysqli_query($conn, $userSql);
+            $user_details = mysqli_fetch_row($user_data);
+        } elseif ($action == 'cancel_delete') {
+            $active_page = 'clients';
+            $delete_panel = false;
+            $delete_message = "Client Delete action canceled";
+        } elseif ($action == 'delete_client') {
+            $active_page = 'clients';
+            $delete_panel = false;
+            $deleted_date = date("Y/m/d"); // today's date
+
+            $sqlDel = "UPDATE users SET deleted_at = '$deleted_date' WHERE id='$user_id'";
+
+            if (mysqli_query($conn, $sqlDel)) {
+                $delete_message = "Client Delete action success";
+            } else {
+                $delete_message = "Something went wrong. Please try again later.";
+            }
+        }
+
+    }
+
+// profile actions
+    if (isset($_POST['show_edit_profile'])) { // show edit profile page
+        $edit_profile = true;
+        $active_page = "profile";
+
+    } elseif (isset($_POST['show_edit_password'])) { // show edit password page
+        $edit_password = true;
+        $active_page = "profile";
+
+    } elseif (isset($_POST['show_delete_account'])) { // show delete account page
+        $delete_account = true;
+        $active_page = "profile";
+
+    } elseif (isset($_POST['cancel_delete_account'])) { // cancel delete account page
+        $delete_account = false;
+        $active_page = "profile";
+
+    } elseif (isset($_POST['edit_profile_details'])) { // edit profile
+        $user_id = $_POST['user_id'];
+        $fname = $_POST['firstname'];
+        $lname = $_POST['lastname'];
+        $mail = $_POST['email'];
+        $phone = $_POST['phone'];
+
+        $sql = "UPDATE users SET first_name = '$fname', last_name = '$lname', email = '$mail', phone = '$phone' WHERE id='$user_id'";
+
+        if (mysqli_query($conn, $sql)) {
+            $edit_profile = false;
+            $active_page = "profile";
+            $success_message = "Profile Details updates successfully";
+
+        } else {
+            $edit_profile = true;
+            $active_page = "profile";
+            $delete_error = "Something went wrong. Please try again later.";
+        }
+    } elseif (isset($_POST['edit_profile_password'])) { //edit password
+        $user_id = $_POST['user_id'];
+        $p_pass = $_POST['password_previous'];
+        $n_pass = $_POST['password_new'];
+        $n_pass_conf = $_POST['password_new_confirm'];
+
+        $sql = "SELECT password FROM users WHERE id = '$user_id'";
+
+        if (strlen(trim($n_pass)) < 6 && strlen(trim($n_pass_conf)) < 6 && strlen(trim($p_pass)) < 6) {
+            $edit_password = true;
+            $active_page = "profile";
+            $delete_error = "The passwords provided are less than 6 characters.";
+
+        } elseif (empty($delete_error) && ($n_pass !== $n_pass_conf)) {
+            $edit_password = true;
+            $active_page = "profile";
+            $delete_error = "The new passwords don't match, try again.";
+
+        } else {
+
+            $new_pass = password_hash($n_pass, PASSWORD_DEFAULT);
+
+            if ($stmt = mysqli_prepare($conn, $sql)) {
+                if (mysqli_stmt_execute($stmt)) {
+                    mysqli_stmt_store_result($stmt);
+
+                    if (mysqli_stmt_num_rows($stmt) == 1) {
+                        mysqli_stmt_bind_result($stmt, $hashed_pass);
+
+                        if (mysqli_stmt_fetch($stmt)) {
+                            if (password_verify($p_pass, $hashed_pass)) {
+                                $sql = "UPDATE users SET password = '$new_pass' WHERE id='$user_id'";
+
+                                if (mysqli_query($conn, $sql)) {
+                                    $active_page = "profile";
+                                    $edit_password = false;
+                                    $success_message = "Profile Password updates successfully";
+
+                                } else {
+                                    $active_page = "profile";
+                                    $edit_password = true;
+                                    $delete_error = "Something went wrong. Please try again later.";
+                                }
+                            } else {
+                                $edit_password = true;
+                                $active_page = "profile";
+                                $delete_error = "Password doesn't match. Try Again.";
+                            }
+                        }
+                    }
+                } else {
+                    $edit_password = true;
+                    $active_page = "profile";
+                    $delete_error = "cjui.";
+                }
+            }
+        }
+    } elseif (isset($_POST['delete_account'])) { // delete account
+        $user_id = $_POST['user_id'];
+        $deleted_date = date("Y/m/d"); // today's date
+
+        $sql = "UPDATE users SET deleted_at = '$deleted_date' WHERE id='$user_id'";
+
+        if (mysqli_query($conn, $sql)) {
+            $_SESSION = array();
+            session_destroy();
+
+            header("location: ../index.php");
+        } else {
+            $delete_error = "Something went wrong. Please try again later.";
+        }
+    }
+
+
+//export actions
+    if (isset($_POST['export_action'])) {
+        $action = $_POST['export_action'];
+        $output = '';
+
+        if ($action == 'export_clients') {
+            $active_page = 'clients';
+
+            $sqlClients = "SELECT * FROM users WHERE user_type = 2 AND deleted_at IS NULL OR deleted_at = ''";
+
+            $clientsResult = mysqli_query($conn, $sqlClients);
+
+            if (mysqli_num_rows($clientsResult) > 0) {
+                $output .= '
+                       <table class="table" bordered="1">  
+                                        <tr>  
+                                             <th>Full Name</th>  
+                                             <th>Email</th>  
+                                             <th>Phone</th>
+                                        </tr>
+                      ';
+                while ($row = mysqli_fetch_array($clientsResult)) {
+                    $output .= '
+                        <tr>  
+                                             <td>' . $row["first_name"] . ' ' . $row["last_name"] . '</td>  
+                                             <td>' . $row["email"] . '</td>  
+                                             <td>' . $row["phone"] . '</td>  
+                                        </tr>
+                       ';
+                }
+                $output .= '</table>';
+                header('Content-Type: application/xls');
+                header('Content-Disposition: attachment; filename=download_clients.xls');
+                echo $output;
+            }
         }
     }
 }
@@ -192,6 +456,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </title>
 
     <link rel="stylesheet" href="../styles/main.css">
+
 </head>
 <body>
 <div class="topnav">
@@ -247,13 +512,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <div class="main-content">
-            <?php if ($active_page == 'events') { ?>
-                <?php include "events.php"; ?>
-            <?php } elseif ($active_page == 'clients') { ?>
-                <h2>Clients Section</h2>
-            <?php } elseif ($active_page == 'profile') { ?>
-                <h2>Profile Page</h2>
-            <?php } ?>
+            <?php if ($active_page == 'events') {
+                include "events.php";
+            } elseif ($active_page == 'clients') {
+                include "clients.php";
+            } elseif ($active_page == 'profile') {
+                include "profile.php";
+            } ?>
         </div>
     </div>
 </div>
