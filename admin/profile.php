@@ -1,4 +1,7 @@
 <?php
+$success_message = $delete_error = '';
+
+global  $edit_profile, $edit_password, $delete_account;
 
 require_once "../backend/auth.php";
 

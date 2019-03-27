@@ -43,10 +43,15 @@ $user_login = new Auth();
 
 
 <div class="backdrop">
-    <div class="banner-text">
+    <div class="banner-text"/ >
+        
         <h1>Shanny's Events</h1>
         <p>We do events that will make awesome memories</p>
         <a href="auth/login.php" class="btn banner-btn">Hire me</a>
+<<<<<<< HEAD
+
+=======
+>>>>>>> 0e05ac2aa989b2457c2dc7e1bc2ba1dcceac932a
     </div>
 </div>
 
@@ -58,23 +63,23 @@ $user_login = new Auth();
         <br>
         <div class="services-panels">
             <div class="service-pa location">
-                <img src="../styles/img/placeholder.svg" class="service-icons" alt=""/>
+                <img src="./styles/img/placeholder.svg" class="service-icons" />
                 <h3>Location Scouting</h3>
                 <p>We search for the perfect venue for your event, according to your requirements</p>
             </div>
             <div class="service-pa management">
-                <img src="../styles/img/parties.svg" class="service-icons" alt=""/>
+                <img src="./styles/img/parties.svg" class="service-icons"/ >
                 <h3>Day of Event Coordination</h3>
                 <p>We do everything possible by ensuring all goes well till the very day</p>
             </div>
             <div class="service-pan relations ">
-                <img src="../styles/img/relations.svg" class="service-icons" alt=""/>
+                <img src="./styles/img/relations.svg" class="service-icons" />
                 <h3>Service Bid and Contract Management</h3>
                 <p>We are able to find cost effective vendors for your event.</p>
             </div>
 
             <div class="service-pan after-service ">
-                <img src="../styles/img/meeting.png" class="service-icons" alt=""/>
+                <img src="./styles/img/meeting.png" class="service-icons" />
                 <h3>Follow-Up Activities</h3>
                 <p>We also do followups to make sure that the clients, and vendors are both satisfied.</p>
             </div>
