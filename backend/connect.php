@@ -1,13 +1,11 @@
 <?php
 
-$conn = mysqli_connect('localhost', 'root', '','shanny-events');
-
 class Database
 {
     // database connection variables
     private $host = "localhost";
-    private $username = "homestead";
-    private $password = "secret";
+    private $username = "root";
+    private $password = "";
     private $database = "shanny-events";
 
     public $conn;
