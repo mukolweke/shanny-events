@@ -52,52 +52,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             //check if its edit or new event submitted
             if (trim($_POST['form_submitted']) == "form_new") {
-                $sql = "INSERT INTO events (name, location, date, people_count, total_cost, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-                if ($stmt = mysqli_prepare($conn, $sql)) {
-                    mysqli_stmt_bind_param(
-                        $stmt, "sssissi",
-                        $param_name,
-                        $param_location,
-                        $param_date,
-                        $param_people,
-                        $param_cost,
-                        $param_status,
-                        $param_user
-                    );
+                if ($logged_user->addRequestEvent($event_name, $event_location, $event_date, $event_people, $event_costs)) {
+                    $logged_user->redirect('client_page.php');
 
-                    $param_name = $event_name;
-                    $param_location = $event_location;
-                    $param_date = $event_date;
-                    $param_people = $event_people;
-                    $param_cost = $event_costs;
-                    $param_status = 3; // latest event
-                    $param_user = $_SESSION['id'];
+                    $form_active = false;
+                } else {
+                    $form_error = "Something went wrong. Please try again later.";
 
-                    if (mysqli_stmt_execute($stmt)) {
-
-                        header("location: client_page.php");
-
-                        $form_active = false;
-                    } else {
-                        $form_error = "Something went wrong. Please try again later.";
-
-                        $form_active = true;
-                    }
+                    $form_active = true;
                 }
             } else {
-                $event_id = $_POST['event_id'];
 
-                if (empty($event_date)) {
-                    $event_date_edit = $_POST['event_date_edit'];
-                } else {
-                    $event_date_edit = $event_date;
-                }
-
-                $sql = "UPDATE events SET name = '$event_name', location = '$event_location', date = '$event_date_edit', people_count = '$event_people', total_cost = '$event_costs' WHERE id = '$event_id'";
-
-                if (mysqli_query($conn, $sql)) {
-                    header("location: client_page.php");
+                if ($logged_user->editRequestEvent($_POST['event_id'], $event_name, $event_location, $event_date, $event_people, $event_costs)) {
+                    $logged_user->redirect('client_page.php');
                 } else {
                     $event_form_error = "Something went wrong. Please try again later.";
                 }
@@ -106,14 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         }
     } elseif (isset($_POST['event_delete'])) { //soft delete existing details
-        $event_id = $_POST['event_id'];
-        $deleted_date = date("Y/m/d"); // today's date
-
-        $sql = "UPDATE events SET deleted_at = '$deleted_date' WHERE id='$event_id'";
-
-        if (mysqli_query($conn, $sql)) {
-            header("location: client_page.php");
-        } else {
+        if ($logged_user->deleteEvent($_POST['event_id'])){
+            $logged_user->redirect('client_page.php');
+        }else{
             $delete_event_error = "Something went wrong. Please try again later.";
         }
 

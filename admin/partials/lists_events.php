@@ -1,9 +1,11 @@
 <?php
+require_once '../../backend/auth.php';
 
-// latest events
-$sql = "SELECT * FROM events WHERE status = '$status_id' AND deleted_at IS NULL OR deleted_at = ''";
+$logged_user = new Auth();
 
-$latest_data = mysqli_query($conn, $sql);
+echo "here";
+
+//$latest_data = $logged_user->getEventsByStatus($status_id);
 
 ?>
 

@@ -190,10 +190,70 @@ class Auth
         $result = mysqli_stmt_get_result($stmt);
 
         while ($row = mysqli_fetch_assoc($result)) {
-            foreach ($row as $item){
+            foreach ($row as $item) {
                 echo $item['name'];
             }
         }
+    }
+
+
+    public function addRequestEvent($event_name, $event_location, $event_date, $event_people, $event_costs)
+    {
+        $user_id = $_SESSION['id'];
+
+        $stmt = $this->runQuery("INSERT INTO events (name, location, date, people_count, total_cost, status, user_id) VALUES ('$event_name', '$event_location', '$event_date', $event_people, '$event_costs', 3, $user_id)");
+
+        if (mysqli_stmt_execute($stmt)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function editRequestEvent($eventId, $event_name, $event_location, $event_date, $event_people, $event_costs)
+    {
+        if (empty($event_date)) {
+            $event_date_edit = $_POST['event_date_edit'];
+        } else {
+            $event_date_edit = $event_date;
+        }
+
+        $stmt = $this->runQuery("UPDATE events SET name = '$event_name', location = '$event_location', date = '$event_date_edit', people_count = '$event_people', total_cost = '$event_costs' WHERE id = '$eventId'");
+
+        if (mysqli_stmt_execute($stmt)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deleteEvent($eventId)
+    {
+        $deleted_date = date("Y/m/d"); // today's date
+
+        $stmt = $this->runQuery("UPDATE events SET deleted_at = '$deleted_date' WHERE id='$eventId'");
+
+        if (mysqli_stmt_execute($stmt)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getEventsByStatus($statusId)
+    {
+        echo "here " . $statusId;
+//        $stmt = $this->runQuery("SELECT * FROM events WHERE status = '$statusId' AND deleted_at IS NULL OR deleted_at = ''");
+//
+//        mysqli_stmt_execute($stmt);
+//
+//        mysqli_stmt_store_result($stmt);
+//
+//        mysqli_stmt_store_result($stmt);
+//
+//        echo "here";
+//
+//        echo mysqli_stmt_num_rows($stmt);
     }
 }
 
