@@ -1,10 +1,7 @@
-
 <div class="event-form">
     <h3>Request Events Form</h3>
 
     <p>Fill in form correctly</p>
-
-    <span class="help-block text-center"><?php echo $event_form_error; ?></span>
 
     <form action="client_page.php" method="post">
         <div class="">
@@ -18,7 +15,7 @@
                    value="<?php echo $event_location; ?>">
         </div>
         <div class="">
-            <label>Date: </label><span><?php echo $event_date; ?></span>
+            <label>Date: </label><span style="color: red;"><?php echo $event_date; ?></span>
             <input type="date" name="event_date" class="input" placeholder="Due Date"
                    value="<?php echo $event_date; ?>">
         </div>
@@ -37,8 +34,8 @@
 
         <?php if ($form_submitted === "edit") { ?>
             <input type="hidden" name="form_submitted" value="form_edit">
-            <input type="hidden" name="event_id" value="<?php echo $event_id?>">
-            <input type="hidden" name="event_date_edit" value="<?php echo $event_date?>">
+            <input type="hidden" name="eventId" value="<?php echo $event_id; ?>">
+            <input type="hidden" name="event_date_edit" value="<?php echo $event_date; ?>">
         <?php } else { ?>
             <input type="hidden" name="form_submitted" value="form_new">
         <?php } ?>

@@ -15,9 +15,9 @@ if (!$logged_user->is_logged_in()) {
 
 $active_page = 'events';
 $form_active = $edit_profile = $edit_password = $delete_account = false;
-$event_name = $event_location = $event_date = $event_people = $event_costs = $delete_error = "";
-$event_form_error = $form_submitted = $delete_event_error = $event_date_edit = $success_message = "";
-$event_id = $notification_count = null;
+$event_name = $event_location = $event_date = $event_people = $event_costs = $delete_error = $event_id = $eventId = "";
+$event_form_error = $form_submitted = $delete_event_error = $event_date_edit = $success_message = $event_form_succ = "";
+$notification_count = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -49,34 +49,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $event_people = trim($_POST['event_people']);
             $event_costs = trim($_POST['event_costs']);
 
-
             //check if its edit or new event submitted
             if (trim($_POST['form_submitted']) == "form_new") {
 
                 if ($logged_user->addRequestEvent($event_name, $event_location, $event_date, $event_people, $event_costs)) {
                     $logged_user->redirect('client_page.php');
-
+                    $event_form_succ = "Event request successfully made...await notifications";
                     $form_active = false;
                 } else {
                     $form_error = "Something went wrong. Please try again later.";
-
                     $form_active = true;
                 }
-            } else {
+            } elseif (trim($_POST['form_submitted']) == "form_edit") {
+                $eventId = $_POST['eventId'];
 
-                if ($logged_user->editRequestEvent($_POST['event_id'], $event_name, $event_location, $event_date, $event_people, $event_costs)) {
+                if ($logged_user->editRequestEvent($eventId, $event_name, $event_location, $event_date, $event_people, $event_costs)) {
                     $logged_user->redirect('client_page.php');
+                    $event_form_succ = "Event edit request successfully made...await notifications";
+                    $form_active = false;
                 } else {
                     $event_form_error = "Something went wrong. Please try again later.";
+                    $form_active = false;
                 }
             }
 
 
         }
     } elseif (isset($_POST['event_delete'])) { //soft delete existing details
-        if ($logged_user->deleteEvent($_POST['event_id'])){
+        if ($logged_user->deleteEvent($_POST['event_id'])) {
             $logged_user->redirect('client_page.php');
-        }else{
+        } else {
             $delete_event_error = "Something went wrong. Please try again later.";
         }
 
@@ -84,22 +86,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $form_active = true;
         $event_id = $_POST['event_id'];
 
-        $sql = "SELECT name, location, date, people_count, total_cost FROM events WHERE id = '$event_id'";
+        if ($details = $logged_user->showEditRequestDetails($_POST['event_id'])) {
+            $form_submitted = "edit";
 
-        if ($stmt = mysqli_prepare($conn, $sql)) {
-
-            if (mysqli_stmt_execute($stmt)) {
-                mysqli_stmt_store_result($stmt);
-
-                if (mysqli_stmt_num_rows($stmt) == 1) {
-                    mysqli_stmt_bind_result($stmt, $event_name, $event_location, $event_date, $event_people, $event_costs);
-
-                    if (mysqli_stmt_fetch($stmt)) {
-                        $form_submitted = "edit";
-                    }
-                }
-            }
+            $event_id = $details['id'];
+            $event_name = $details['name'];
+            $event_location = $details['location'];
+            $event_date = $details['date'];
+            $event_people = $details['people_count'];
+            $event_costs = $details['total_cost'];
         }
+
     } elseif (isset($_POST['show_edit_profile'])) { // show edit profile page
         $edit_profile = true;
         $active_page = "profile";
@@ -248,6 +245,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($active_page == 'events') {
                 ?>
                 <h2>Events Section</h2>
+
+                <span class="help-block text-center" style="color: red;"><?php echo $event_form_error; ?></span>
+                <span class="help-block text-center" style="color: green;"><?php echo $event_form_succ; ?></span>
 
                 <?php if (!$form_active) { ?>
                     <form action="client_page.php" method="post">

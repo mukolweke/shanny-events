@@ -2,9 +2,16 @@
 
 require_once('../backend/auth.php');
 
-$logged_user= new Auth();
+$logged_user = new Auth();
+$message = "";
+$events = "";
 
-$data = $logged_user->getAllEvents($_SESSION['id']);
+if ($logged_user->getAllEvents($_SESSION['id'])) {
+    $events = $logged_user->getAllEvents($_SESSION['id']);
+} else {
+    $message = "currently no available events";
+}
+
 
 ?>
 
@@ -24,14 +31,14 @@ $data = $logged_user->getAllEvents($_SESSION['id']);
             <th class="">Actions</th>
         </tr>
 
-        <?php foreach ($data as $array) { ?>
+        <?php foreach ($events as $array) { ?>
             <tr>
                 <td class=""><?php echo $array['name']; ?></td>
                 <td class=""><?php echo $array['location']; ?></td>
                 <td class=""><?php echo $array['date']; ?></td>
                 <td class=""><?php echo $array['people_count']; ?></td>
                 <td class=""><?php echo $array['total_cost']; ?></td>
-                <td class=""><?php echo $array['status']; ?></td>
+                <td class=""><?php echo $logged_user->statusName($array['status']); ?></td>
                 <td class=" action-btns">
                     <form action="client_page.php" method="post">
                         <input type="hidden" name="event_delete" value="delete">
