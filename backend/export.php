@@ -1,6 +1,9 @@
 <?php
+session_start();
 
-require_once "connect.php";
+require_once '../backend/auth.php';
+
+$logged_user = new Auth();
 
 $output = '';
 
@@ -17,16 +20,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
         }
 
-        $filename = "shanny_events_clients_" . date('Ymd') . ".xls";
+        $filename = "shanny_events_clients_" . date('Ymd') . ".xlsx";
 
-        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header("Content-Disposition: attachment; filename=$filename");
         header("Content-Type: application/vnd.ms-excel");
 
         $flag = false;
-        $sqlClients = "SELECT first_name, last_name, email, phone FROM users;";
-        $clientsResult = mysqli_query($conn, $sqlClients);
 
-        while (false !== ($row = mysqli_fetch_assoc($clientsResult))) {
+        $clientsResult = $logged_user->getAllClients();
+
+        while (false !== ($row = $clientsResult)) {
             if (!$flag) {
 
                 echo implode("\t", array_keys($row)) . "\r\n";

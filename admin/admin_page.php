@@ -259,10 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $active_page = 'clients';
             $delete_panel = true;
 
-            $userSql = "SELECT * FROM users WHERE id='$user_id'";
-
-            $user_data = mysqli_query($conn, $userSql);
-            $user_details = mysqli_fetch_row($user_data);
+            $user_details = $logged_user->getClientInformation($user_id);
         } elseif ($action == 'cancel_delete') {
             $active_page = 'clients';
             $delete_panel = false;
@@ -270,11 +267,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } elseif ($action == 'delete_client') {
             $active_page = 'clients';
             $delete_panel = false;
-            $deleted_date = date("Y/m/d"); // today's date
 
-            $sqlDel = "UPDATE users SET deleted_at = '$deleted_date' WHERE id='$user_id'";
-
-            if (mysqli_query($conn, $sqlDel)) {
+            if ($logged_user->deleteAccount($user_id)) {
                 $delete_message = "Client Delete action success";
             } else {
                 $delete_message = "Something went wrong. Please try again later.";

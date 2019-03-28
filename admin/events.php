@@ -46,13 +46,11 @@ function setSum($value)
 
 function updateBalance($val)
 {
-    global $id, $conn, $total_cost;
+    global $id, $conn, $total_cost, $logged_user;
 
     $event_balance = $total_cost - $val;
 
-    $sqlBal = "UPDATE events SET total_bal = '$event_balance' WHERE id='$id'";
-
-    mysqli_query($conn, $sqlBal);
+    $logged_user->updateBalance($event_balance, $id);
 }
 
 ?>

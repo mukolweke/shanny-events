@@ -2,23 +2,21 @@
 $eventCount = 0;
 function getUserEventsCount($user_id)
 {
-    global $conn;
     global $eventCount;
+    global $logged_user;
 
-    $sql = "SELECT COUNT(*) AS eventCount FROM events WHERE user_id = '$user_id'";
-
-    $eventCount = mysqli_fetch_row(mysqli_query($conn, $sql))[0];
+    $eventCount = $logged_user->countUserEvents($user_id);
 
     if ($eventCount == 0) {
         echo "None";
     } else {
-        echo $eventCount;
+        echo $eventCount . " event(s)";
     }
 }
 
-$sql = "SELECT * FROM users WHERE user_type = 2 AND deleted_at IS NULL OR deleted_at = ''";
+$user_type = 2;
 
-$clients_data = mysqli_query($conn, $sql);
+$clients_data = $logged_user->getAllUsersByType($user_type);
 
 ?>
 
@@ -53,7 +51,7 @@ $clients_data = mysqli_query($conn, $sql);
                     <th>Action</th>
                 </tr>
 
-                <?php while ($array = mysqli_fetch_array($clients_data)) { ?>
+                <?php foreach ($clients_data as $array) { ?>
                     <tr>
                         <td class=""><?php echo $array['first_name'] . ' ' . $array['last_name']; ?></td>
                         <td class=""><?php echo $array['email']; ?></td>
@@ -84,9 +82,9 @@ $clients_data = mysqli_query($conn, $sql);
 
                     <h4 style="color: red;">Are you sure you want to delete clients account details</h4>
 
-                    <p>Name: <?php echo $user_details[1] . ' ' . $user_details[2] ?></p>
-                    <p>Email: <?php echo $user_details[3]; ?></p>
-                    <p>Phone: <?php echo $user_details[4]; ?></p>
+                    <p>Name: <?php echo $user_details['first_name'] . ' ' . $user_details['last_name'] ?></p>
+                    <p>Email: <?php echo $user_details['email']; ?></p>
+                    <p>Phone: <?php echo $user_details['phone']; ?></p>
 
                     <div class="edit-form-group">
 

@@ -39,7 +39,7 @@
             </tr>
 
             <tr>
-                <th><?php if ($status_id != 4) { ?> Actions <?php } ?></th>
+                <th><?php if ($status_id == 2 || $status_id == 3) { ?> Actions <?php } ?></th>
                 <td>
                     <div class="admin-view-event-action">
                         <?php if ($status_id == 3) { ?>
@@ -92,14 +92,6 @@
                                 <input type="hidden" name="event_id" value="<?php echo $id; ?>">
 
                                 <button class="btn btn-success">Event Completed</button>
-                            </form>
-                        <?php } elseif ($status_id == 1) { ?>
-                            <form action="" method="post">
-                                <input type="hidden" name="completed_action" value="view_sub_task">
-
-                                <input type="hidden" name="event_id" value="<?php echo $id; ?>">
-
-                                <button class="btn btn-edit">View Subtask</button>
                             </form>
                         <?php } ?>
                     </div>
@@ -198,56 +190,6 @@
             <?php }
         } ?>
 
-        <!--only for ongoing events-->
-        <?php if ($status_id == 1) { ?>
-            <?php
-
-            if (sizeof($events_task_data) > 0) { ?>
-                <div>
-                    <!--table to list all the sub-task-->
-                    <table style="width:100%">
-                        <tr>
-                            <th class="">Name</th>
-                            <th class="">Description</th>
-                            <th class="">Cost (KES)</th>
-                            <th class="">Actions</th>
-                        </tr>
-
-                        <?php foreach ($events_task_data as $row) { ?>
-                            <tr>
-                                <td><?php echo $row['name']; ?></td>
-                                <td><?php echo $row['description']; ?></td>
-                                <td><?php echo $row['cost']; ?></td>
-                                <td style="display: none;"><?php setSum($row['cost']) ?></td>
-                                <td>
-                                    <form action="" method="post">
-                                        <input type="hidden" value="<?php echo $row['id']; ?>" name="task_id"/>
-                                        <input type="hidden" name="event_id" value="<?php echo $id; ?>">
-
-                                        <input type="hidden" name="event_sub_task_actions" value="show_del_sub_task">
-
-                                        <button class="btn btn-delete">DELETE</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <?php
-                        } ?>
-
-                        <tr>
-                            <th>Total</th>
-                            <th></th>
-                            <th><?php echo $sum; ?></th>
-                            <th></th>
-                        </tr>
-                    </table>
-                </div>
-            <?php } else { ?>
-
-                <p>No Sub-Tasks available</p>
-
-            <?php }
-        } ?>
-
         <?php if ($edit_task && !$event_sub_task) { ?>
             <h3>DELETE SUBTASK</h3>
 
@@ -279,5 +221,45 @@
         <?php } ?>
 
     <?php } ?>
+
+    <!--only for ongoing events-->
+    <?php if ($status_id == 1) { ?>
+        <h3>SubTasks</h3>
+        <?php
+
+        if (sizeof($events_task_data) > 0) { ?>
+            <div>
+                <!--table to list all the sub-task-->
+                <table style="width:100%">
+                    <tr>
+                        <th class="">Name</th>
+                        <th class="">Description</th>
+                        <th class="">Cost (KES)</th>
+                    </tr>
+
+                    <?php foreach ($events_task_data as $row) { ?>
+                        <tr>
+                            <td><?php echo $row['name']; ?></td>
+                            <td><?php echo $row['description']; ?></td>
+                            <td><?php echo $row['cost']; ?></td>
+                            <td style="display: none;"><?php setSum($row['cost']) ?></td>
+                        </tr>
+                        <?php
+                    } ?>
+
+                    <tr>
+                        <th>Total</th>
+                        <th></th>
+                        <th><?php echo $sum; ?></th>
+                        <th></th>
+                    </tr>
+                </table>
+            </div>
+        <?php } else { ?>
+
+            <p>No Sub-Tasks available</p>
+
+        <?php }
+    } ?>
 
 </div>

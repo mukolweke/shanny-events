@@ -210,7 +210,7 @@ class Auth
     {
         $user_id = $_SESSION['id'];
 
-        $stmt = $this->runQuery("INSERT INTO events (name, location, date, people_count, total_cost, status, user_id) VALUES ('$event_name', '$event_location', '$event_date', $event_people, '$event_costs', 3, $user_id)");
+        $stmt = $this->runQuery("INSERT INTO events (name, location, date, people_count, total_cost, status, user_id, total_bal) VALUES ('$event_name', '$event_location', '$event_date', $event_people, '$event_costs', 3, $user_id, '$event_costs')");
 
         if (mysqli_stmt_execute($stmt)) {
             return true;
@@ -390,6 +390,66 @@ class Auth
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function updateBalance($amount, $eventId)
+    {
+        $stmt = $this->runQuery("UPDATE events SET total_bal = '$amount' WHERE id='$eventId'");
+
+        mysqli_stmt_execute($stmt);
+    }
+
+    public function getAllUsersByType($userType)
+    {
+        $stmt = $this->runQuery("SELECT id, first_name, last_name, email, phone FROM users WHERE user_type = $userType AND deleted_at IS NULL OR deleted_at = ''");
+
+        if (mysqli_stmt_execute($stmt)) {
+
+            mysqli_stmt_bind_result($stmt, $id, $first_name, $last_name, $email, $phone);
+
+            while (mysqli_stmt_fetch($stmt)) {
+                $users[] = ['id' => $id, 'first_name' => $first_name, 'last_name' => $last_name,'email' => $email, 'phone' => $phone];
+            }
+
+            if (empty($users)) {
+                return false;
+            } else {
+                return $users;
+            }
+        }
+    }
+
+    public function countUserEvents($userId)
+    {
+        $stmt = $this->runQuery("SELECT COUNT(*) AS eventCount FROM events WHERE user_id = $userId");
+
+        mysqli_stmt_execute($stmt);
+
+        mysqli_stmt_bind_result($stmt, $eventCount);
+
+        mysqli_stmt_fetch($stmt);
+
+        return  $eventCount;
+    }
+
+    public function getAllClients()
+    {
+        $stmt = $this->runQuery("SELECT first_name, last_name, email, phone FROM users WHERE NOT id = 1 ");
+
+        if (mysqli_stmt_execute($stmt)) {
+
+            mysqli_stmt_bind_result($stmt, $id, $first_name, $last_name, $email, $phone);
+
+            while (mysqli_stmt_fetch($stmt)) {
+                $users[] = ['id' => $id, 'first_name' => $first_name, 'last_name' => $last_name,'email' => $email, 'phone' => $phone];
+            }
+
+            if (empty($users)) {
+                return false;
+            } else {
+                return $users;
+            }
         }
     }
 }
