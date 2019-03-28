@@ -15,7 +15,7 @@ if ($reg_user->is_logged_in()) {
 
 
 $first_name = $last_name = $email = $phone = $password = $confirm_password = $form_error = "";
-$first_name_err = $last_name_err = $email_err = $phone_err = $password_err = $confirm_password_err = "";
+$first_name_err = $last_name_err = $email_err = $phone_err = $password_err = $confirm_password_err = $form_err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -71,9 +71,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $last_name = trim($_POST["last_name"]);
             $email = trim($_POST["email"]);
             $phone = trim($_POST["phone"]);
-            $pass = $param_password = password_hash($password, PASSWORD_DEFAULT);
+            $pass = password_hash(trim($_POST["password"]), PASSWORD_DEFAULT);
 
-            $reg_user->register($first_name, $last_name, $email, $phone, $pass, 2);
+            if ($reg_user->register($first_name, $last_name, $email, $phone, $pass, 2)){
+                $this->redirect("../auth/login.php");
+            }else{
+                $form_err = "Please check your details are correct";
+            }
         }
     }
 }
@@ -102,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <p class="text-center">Please fill this form to create an account.</p>
 
-        <p class="text-center help-block"><?php echo $form_error ?></p>
+        <p class="text-center help-block" style="color: red;"><?php echo $form_error ?></p>
 
         <form action="register.php" method="post">
 

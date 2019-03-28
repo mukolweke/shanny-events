@@ -27,15 +27,14 @@ class Auth
     public function register($fname, $lname, $email, $phone, $pass, $utype)
     {
         try {
-            $password = md5($pass);
+            $stmt = $this->runQuery("INSERT INTO users(first_name, last_name, email, phone, password, user_type)
+                  VALUES('$fname', '$lname', '$email', '$phone', '$pass', $utype)");
 
-            $stmt = $this->runQuery("INSERT INTO users(first_name, last_name, email, phone, password, user_type) 
-                  VALUES('$fname', '$lname', '$email', '$phone', '$password', '$utype')");
-
-            mysqli_stmt_execute($stmt);
-
-            $this->redirect("../auth/login.php");
-
+            if (mysqli_stmt_execute($stmt)) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (mysqli_sql_exception $ex) {
             echo $ex->getMessage();
         }
@@ -64,17 +63,7 @@ class Auth
                             $_SESSION["email"] = $email;
                             $_SESSION["user_type"] = $user_type;
 
-                            //redirect user according to user type
-                            if ($user_type == 1) {
-                                // admin/ event planner
-                                $this->redirect('../admin/admin_page.php');
-                                return true;
-                            } elseif ($user_type == 2) {
-                                // customer
-                                $this->redirect('../client/client_page.php');
-                                return true;
-                            }
-
+                            return true;
                         } else {
                             $this->password_err = "The password you entered was not valid.";
                             return false;
@@ -245,11 +234,11 @@ class Auth
     {
 //        $stmt = $this->runQuery("SELECT * FROM events WHERE status = '$statusId' AND deleted_at IS NULL OR deleted_at = ''");
 
-         if ($result =  mysqli_query("SELECT * FROM events WHERE status = '$statusId' AND deleted_at IS NULL OR deleted_at = ''")){
-             while ($row = mysqli_fetch_assoc($result)){
-                 echo $row["name"] . " here";
-             }
-         }
+        if ($result = mysqli_query("SELECT * FROM events WHERE status = '$statusId' AND deleted_at IS NULL OR deleted_at = ''")) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo $row["name"] . " here";
+            }
+        }
 
     }
 }

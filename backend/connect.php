@@ -4,8 +4,8 @@ class Database
 {
     // database connection variables
     private $host = "localhost";
-    private $username = "root";
-    private $password = "";
+    private $username = "homestead";
+    private $password = "secret";
     private $database = "shanny-events";
 
     public $conn;

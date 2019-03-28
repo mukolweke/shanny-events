@@ -15,7 +15,7 @@ if ($logged_user->is_logged_in()) {
 
 $email = $password = "";
 $user_type = null;
-$email_err = $password_err = "";
+$email_err = $password_err = $form_err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -34,7 +34,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate credentials on DB;
     if (empty($email_err) && empty($password_err)) {
-        $logged_user->login($email, $password);
+        if ($logged_user->login($email, $password)) {
+
+            if ($_SESSION['user_type'] == 1) {
+                // admin/ event planner
+                $logged_user->redirect('../admin/admin_page.php');
+            } elseif ($_SESSION['user_type'] == 2) {
+                // customer
+                $logged_user->redirect('../client/client_page.php');
+            }
+        }else{
+            $form_err = "Please check your details are correct";
+        }
     }
 }
 ?>
@@ -59,6 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container">
     <div class="wrapper">
         <h2 class="text-center">Welcome to Shann'y Events</h2>
+        <p class="text-center" style="color: red;"><?php echo $form_err ?></p>
         <form action="login.php" method="post">
             <div class=" <?php echo (!empty($email_err)) ? 'has-error' : ''; ?>">
                 <!--                <label>Email</label>-->
