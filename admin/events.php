@@ -1,3 +1,12 @@
+<?php
+require_once "../backend/auth.php";
+
+$logged_user = new Auth();
+
+$logged_user->getEventsByStatus($status_id);
+
+?>
+
 <div class="events-admin">
     <h2>Events Section</h2>
 

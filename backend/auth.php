@@ -19,6 +19,7 @@ class Auth
     public function runQuery($sql)
     {
         $stmt = mysqli_prepare($this->conn, $sql);
+
         return $stmt;
     }
 
@@ -242,18 +243,14 @@ class Auth
 
     public function getEventsByStatus($statusId)
     {
-        echo "here " . $statusId;
 //        $stmt = $this->runQuery("SELECT * FROM events WHERE status = '$statusId' AND deleted_at IS NULL OR deleted_at = ''");
-//
-//        mysqli_stmt_execute($stmt);
-//
-//        mysqli_stmt_store_result($stmt);
-//
-//        mysqli_stmt_store_result($stmt);
-//
-//        echo "here";
-//
-//        echo mysqli_stmt_num_rows($stmt);
+
+         if ($result =  mysqli_query("SELECT * FROM events WHERE status = '$statusId' AND deleted_at IS NULL OR deleted_at = ''")){
+             while ($row = mysqli_fetch_assoc($result)){
+                 echo $row["name"] . " here";
+             }
+         }
+
     }
 }
 

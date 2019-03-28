@@ -1,7 +1,5 @@
 <?php
 
-$conn = mysqli_connect('localhost', 'root', '','shanny-events');
-
 class Database
 {
     // database connection variables
