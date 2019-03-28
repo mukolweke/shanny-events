@@ -257,7 +257,20 @@ class Auth
     {
         $deleted_date = date("Y/m/d"); // today's date
 
-        $stmt = $this->runQuery("UPDATE events SET deleted_at = '$deleted_date' WHERE id='$eventId'");
+        $stmt = $this->runQuery("UPDATE events SET deleted_at = '$deleted_date' WHERE id= $eventId");
+
+        if (mysqli_stmt_execute($stmt)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deleteEventTask($eventTaskId)
+    {
+        $deleted_date = date("Y/m/d"); // today's date
+
+        $stmt = $this->runQuery("UPDATE events_task SET deleted_at = '$deleted_date' WHERE id= $eventTaskId");
 
         if (mysqli_stmt_execute($stmt)) {
             return true;
@@ -289,7 +302,7 @@ class Auth
     public function viewEventDetails($eventId)
     {
         try {
-            $stmt = $this->runQuery("SELECT * FROM events WHERE id = '$eventId'");
+            $stmt = $this->runQuery("SELECT * FROM events WHERE id = $eventId");
 
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
@@ -306,7 +319,7 @@ class Auth
     public function getStatusDetails($status_id)
     {
         try {
-            $stmt = $this->runQuery("SELECT * FROM events_status WHERE id = '$status_id'");
+            $stmt = $this->runQuery("SELECT * FROM events_status WHERE id = $status_id");
 
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
@@ -336,6 +349,47 @@ class Auth
             } else {
                 return $eventSubTasks;
             }
+        }
+    }
+
+    public function eventAction($action, $eventId)
+    {
+        if ($action == 'accept') {
+            $stmt = $this->runQuery("UPDATE events SET status = 2 WHERE id = $eventId");
+        } elseif ($action == 'reject') {
+            $stmt = $this->runQuery("UPDATE events SET status = 4 WHERE id = $eventId");
+        } elseif ($action == 'done') {
+            $stmt = $this->runQuery("UPDATE events SET status = 1 WHERE id = $eventId");
+        }
+
+        if (mysqli_stmt_execute($stmt)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function addEventTask($name, $description, $cost, $event_id)
+    {
+        $stmt = $this->runQuery("INSERT INTO events_task (name, description, cost, event_id) VALUES ('$name', '$description', $cost, $event_id)");
+
+        if (mysqli_stmt_execute($stmt)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function addNotification($from, $to, $message, $event)
+    {
+        $status = 1;
+
+        $stmt = $this->runQuery("INSERT INTO notifications (from_id, to_id, message, event, status) values ('$from', '$to', '$message', $event, $status)");
+
+        if (mysqli_stmt_execute($stmt)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

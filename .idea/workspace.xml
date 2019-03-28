@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9bb8bce7-27d9-402f-a9f1-79e2a89cb369" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/events.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/events.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin/partials/lists_events.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/partials/lists_events.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/admin_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/admin_page.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/partials/view_event.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/partials/view_event.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth.php" afterDir="false" />
     </list>
@@ -17,10 +15,10 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/admin/partials/view_event.php">
+        <entry file="file://$PROJECT_DIR$/backend/auth.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-213">
-              <caret line="216" column="56" lean-forward="true" selection-start-line="216" selection-start-column="56" selection-end-line="216" selection-end-column="56" />
+            <state relative-caret-position="285">
+              <caret line="19" column="5" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -35,7 +33,6 @@
       <find>delete</find>
       <find>show_edit_profile</find>
       <find>setSum</find>
-      <find>event_sub_task_actions</find>
       <find>update</find>
       <find>add_sub_task</find>
       <find>done</find>
@@ -55,6 +52,10 @@
       <find>$event_form_error</find>
       <find>mysqli_fetch_array</find>
       <find>event_edit</find>
+      <find>event_sub_task_actions</find>
+      <find>deleteEve</find>
+      <find>sub_task_id</find>
+      <find>$edit_task</find>
       <find>$events_task_data</find>
     </findStrings>
     <replaceStrings>
@@ -80,7 +81,6 @@
         <option value="$PROJECT_DIR$/backend/user.php" />
         <option value="$PROJECT_DIR$/client/profile.php" />
         <option value="$PROJECT_DIR$/admin/profile.php" />
-        <option value="$PROJECT_DIR$/admin/admin_page.php" />
         <option value="$PROJECT_DIR$/backend/export.php" />
         <option value="$PROJECT_DIR$/index.php" />
         <option value="$PROJECT_DIR$/backend/connect.php" />
@@ -90,9 +90,10 @@
         <option value="$PROJECT_DIR$/client/client_page.php" />
         <option value="$PROJECT_DIR$/admin/partials/lists_events.php" />
         <option value="$PROJECT_DIR$/client/events.php" />
-        <option value="$PROJECT_DIR$/backend/auth.php" />
         <option value="$PROJECT_DIR$/admin/events.php" />
+        <option value="$PROJECT_DIR$/admin/admin_page.php" />
         <option value="$PROJECT_DIR$/admin/partials/view_event.php" />
+        <option value="$PROJECT_DIR$/backend/auth.php" />
       </list>
     </option>
   </component>
@@ -198,12 +199,12 @@
       <workItem from="1553531921713" duration="746000" />
       <workItem from="1553602190182" duration="3814000" />
       <workItem from="1553620342346" duration="12443000" />
-      <workItem from="1553675552377" duration="24585000" />
+      <workItem from="1553675552377" duration="26606000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="67419000" />
+    <option name="totallyTimeSpent" value="69440000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -363,13 +364,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/admin/admin_page.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="48" column="43" lean-forward="true" selection-start-line="48" selection-start-column="43" selection-end-line="48" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/events.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -393,22 +387,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/admin/events.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
+        <state relative-caret-position="190">
           <caret line="32" column="17" selection-start-line="32" selection-end-line="32" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/auth.php">
+    <entry file="file://$PROJECT_DIR$/admin/admin_page.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="784">
-          <caret line="336" column="37" selection-start-line="336" selection-start-column="37" selection-end-line="336" selection-end-column="37" />
+        <state relative-caret-position="306">
+          <caret line="220" column="20" selection-start-line="220" selection-start-column="12" selection-end-line="220" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/admin/partials/view_event.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-213">
-          <caret line="216" column="56" lean-forward="true" selection-start-line="216" selection-start-column="56" selection-end-line="216" selection-end-column="56" />
+        <state relative-caret-position="462">
+          <caret line="256" lean-forward="true" selection-start-line="256" selection-end-line="256" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/backend/auth.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="5" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
         </state>
       </provider>
     </entry>

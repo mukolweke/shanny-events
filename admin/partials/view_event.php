@@ -1,8 +1,3 @@
-<?php
-
-
-?>
-
 <div class="admin-view-event">
     <h3>Event Description</h3>
 
@@ -44,7 +39,7 @@
             </tr>
 
             <tr>
-                <th>Actions</th>
+                <th><?php if ($status_id != 4) { ?> Actions <?php } ?></th>
                 <td>
                     <div class="admin-view-event-action">
                         <?php if ($status_id == 3) { ?>
@@ -123,7 +118,7 @@
         <?php if ($sub_task_form && !$event_sub_task) { ?>
             <div>
                 <!-- form to add the tasks -->
-                <form id="edit_form" action="../admin/admin_page.php" method="post">
+                <form id="edit_form" action="../../admin/admin_page.php" method="post">
                     <h3>Add SubTask</h3>
 
                     <div class="edit-form-group">
@@ -274,7 +269,7 @@
                 <form action="" method="post" style="float: left;width: 50%;">
                     <input type="hidden" name="event_sub_task_actions" value="sub_task_delete">
                     <input type="hidden" name="event_id" value="<?php echo $id; ?>">
-                    <input type="hidden" name="sub_task_id" value="<?php echo $sub_task_id; ?>">
+                    <input type="hidden" name="sub_task_id" value="<?php echo $task_id; ?>">
 
                     <button name="submit" type="submit" id="contact-submit" class="delete_form_btn"
                             data-submit="...Sending">YES

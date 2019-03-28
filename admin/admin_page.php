@@ -86,9 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $active_page = 'events';
 
         if ($action == 'accept') {
-            $sql = "UPDATE events SET status = 2 WHERE id = '$event_id'";
-
-            if (mysqli_query($conn, $sql)) {
+            if ($logged_user->eventAction($action, $event_id)){
                 $active_page = 'events';
                 $completed_action = $ongoing_action = $rejected_action = false;
                 $latest_action = true;
@@ -102,9 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $event_action_error = "Something went wrong. Please try again later.";
             }
         } else if ($action == 'reject') {
-            $sql = "UPDATE events SET status = 4 WHERE id = '$event_id'";
-
-            if (mysqli_query($conn, $sql)) {
+            if ($logged_user->eventAction($action, $event_id)) {
                 $active_page = 'events';
                 $completed_action = $ongoing_action = $rejected_action = false;
                 $latest_action = true;
@@ -118,9 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $event_action_error = "Something went wrong. Please try again later.";
             }
         } else if ($action == 'done') {
-            $sql = "UPDATE events SET status = 1 WHERE id = '$event_id'";
-
-            if (mysqli_query($conn, $sql)) {
+            if ($logged_user->eventAction($action, $event_id)) {
                 $active_page = 'events';
                 $latest_action = $completed_action = $rejected_action = false;
                 $ongoing_action = true;
@@ -155,15 +149,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $event = $_POST['event_id'];
             $task_sum = $_POST['task_sum'] + $cost;
 
-            $sqlEvent = "SELECT * FROM events WHERE id = '$event'";
-            $event_data = mysqli_query($conn, $sqlEvent);
-            $event_details = mysqli_fetch_row($event_data);
+            $event_details = $logged_user->viewEventDetails($event);
 
             // check if budget is passed
-            if ($task_sum < $event_details[5]) {
-                $sql = "INSERT INTO events_task (name, description, cost, event_id) VALUES ('$name', '$description', '$cost', '$event')";
-
-                if (mysqli_query($conn, $sql)) {
+            if ($task_sum < $event_details['total_cost']) {
+                if ($logged_user->addEventTask($name, $description, $cost, $event)) {
                     $active_page = 'events';
                     $latest_action = $completed_action = $rejected_action = false;
                     $ongoing_action = true;
@@ -200,10 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $message = "Additional Funds requested for this event";
             $event = $_POST['event_id'];
 
-
-            $sqlAddFunds = "INSERT INTO notifications (from_id, to_id, message, event, status) values ('$from', '$to', '$message', '$event', 1)";
-
-            if (mysqli_query($conn, $sqlAddFunds)) {
+            if ($logged_user->addNotification($from, $to, $message, $event)) {
                 $active_page = 'events';
                 $latest_action = $completed_action = $rejected_action = false;
                 $ongoing_action = true;
@@ -255,12 +242,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $edit_task = false;
             $sub_task_form = false;
 
-
-            $deleted_date = date("Y/m/d"); // today's date
-
-            $sqlDel = "UPDATE events_task SET deleted_at = '$deleted_date' WHERE id='$sub_task_id'";
-
-            if (mysqli_query($conn, $sqlDel)) {
+            if ($logged_user->deleteEventTask($sub_task_id)) {
                 $event_action_success = 'Delete process success';
             } else {
                 $event_action_error = "Something went wrong. Please try again later.";
