@@ -268,14 +268,75 @@ class Auth
 
     public function getEventsByStatus($statusId)
     {
-//        $stmt = $this->runQuery("SELECT * FROM events WHERE status = '$statusId' AND deleted_at IS NULL OR deleted_at = ''");
+        $stmt = $this->runQuery("SELECT id, name, location, date, people_count, total_cost, status, total_bal FROM events WHERE status = $statusId AND deleted_at IS NULL OR deleted_at = ''");
 
-        if ($result = mysqli_query("SELECT * FROM events WHERE status = '$statusId' AND deleted_at IS NULL OR deleted_at = ''")) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo $row["name"] . " here";
+        if (mysqli_stmt_execute($stmt)) {
+
+            mysqli_stmt_bind_result($stmt, $id, $name, $location, $date, $people_count, $total_cost, $status, $total_bal);
+
+            while (mysqli_stmt_fetch($stmt)) {
+                $events[] = ['id' => $id, 'name' => $name, 'location' => $location, 'date' => $date, 'people_count' => $people_count, 'total_cost' => $total_cost, 'status' => $status, 'total_bal' => $total_bal];
+            }
+
+            if (empty($events)) {
+                return false;
+            } else {
+                return $events;
             }
         }
+    }
 
+    public function viewEventDetails($eventId)
+    {
+        try {
+            $stmt = $this->runQuery("SELECT * FROM events WHERE id = '$eventId'");
+
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                return $row;
+            }
+
+        } catch (mysqli_sql_exception $ex) {
+            echo $ex->getMessage();
+        }
+    }
+
+    public function getStatusDetails($status_id)
+    {
+        try {
+            $stmt = $this->runQuery("SELECT * FROM events_status WHERE id = '$status_id'");
+
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                return $row;
+            }
+
+        } catch (mysqli_sql_exception $ex) {
+            echo $ex->getMessage();
+        }
+    }
+
+    public function getEventsSubTask($eventId)
+    {
+        $stmt = $this->runQuery("SELECT id, name, description, cost, event_id, status FROM events_task WHERE event_id = $eventId AND deleted_at IS NULL OR deleted_at = ''");
+        if (mysqli_stmt_execute($stmt)) {
+
+            mysqli_stmt_bind_result($stmt, $id, $name, $description, $cost, $event_id, $status);
+
+            while (mysqli_stmt_fetch($stmt)) {
+                $eventSubTasks[] = ['id' => $id, 'name' => $name, 'description' => $description, 'cost' => $cost, 'event_id' => $event_id, 'status' => $status];
+            }
+
+            if (empty($eventSubTasks)) {
+                return false;
+            } else {
+                return $eventSubTasks;
+            }
+        }
     }
 }
 

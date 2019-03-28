@@ -1,57 +1,5 @@
 <?php
-// get the events
-$sqlEvent = "SELECT * FROM events WHERE id = '$event_id'";
-$event_data = mysqli_query($conn, $sqlEvent);
-$event_details = mysqli_fetch_row($event_data);
 
-$id = $event_details[0];
-$name = $event_details[1];
-$location = $event_details[2];
-$date = $event_details[3];
-$people_count = $event_details[4];
-$total_cost = $event_details[5];
-$user_id = $event_details[6];
-$status_id = $event_details[10];
-$total_bal = intval($event_details[11]);
-
-// get the user details: name
-$sqlUser = "SELECT * FROM users WHERE id = '$user_id'";
-$user_data = mysqli_query($conn, $sqlUser);
-$user_details = mysqli_fetch_row($user_data);
-$full_name = $user_details[1] . ' ' . $user_details[2];
-
-// get the event status name
-$sqlStatus = "SELECT * FROM events_status WHERE id = '$status_id'";
-$status_data = mysqli_query($conn, $sqlStatus);
-$status_details = mysqli_fetch_row($status_data);
-$status_name = $status_details[1];
-
-// get the sub-task details for a given event.
-$sql = "SELECT * FROM events_task WHERE event_id = '$id' AND deleted_at IS NULL OR deleted_at = ''";
-$events_task_data = mysqli_query($conn, $sql);
-
-$sum = 0;
-$event_balance = 0;
-
-function setSum($value)
-{
-    global $sum;
-
-    $sum += $value;
-
-    updateBalance($sum);
-}
-
-function updateBalance($val)
-{
-    global $id, $conn, $total_cost;
-
-    $event_balance = $total_cost - $val;
-
-    $sqlBal = "UPDATE events SET total_bal = '$event_balance' WHERE id='$id'";
-
-    mysqli_query($conn, $sqlBal);
-}
 
 ?>
 
@@ -209,7 +157,7 @@ function updateBalance($val)
 
             <?php
 
-            if (mysqli_num_rows($events_task_data) > 0) { ?>
+            if (sizeof($events_task_data) > 0) { ?>
                 <div>
                     <!--table to list all the sub-task-->
                     <table style="width:100%">
@@ -220,7 +168,7 @@ function updateBalance($val)
                             <th class="">Actions</th>
                         </tr>
 
-                        <?php while ($row = mysqli_fetch_array($events_task_data)) { ?>
+                        <?php foreach ($events_task_data as $row) { ?>
                             <tr>
                                 <td><?php echo $row['name']; ?></td>
                                 <td><?php echo $row['description']; ?></td>
@@ -259,7 +207,7 @@ function updateBalance($val)
         <?php if ($status_id == 1) { ?>
             <?php
 
-            if (mysqli_num_rows($events_task_data) > 0) { ?>
+            if (sizeof($events_task_data) > 0) { ?>
                 <div>
                     <!--table to list all the sub-task-->
                     <table style="width:100%">
@@ -270,7 +218,7 @@ function updateBalance($val)
                             <th class="">Actions</th>
                         </tr>
 
-                        <?php while ($row = mysqli_fetch_array($events_task_data)) { ?>
+                        <?php foreach ($events_task_data as $row) { ?>
                             <tr>
                                 <td><?php echo $row['name']; ?></td>
                                 <td><?php echo $row['description']; ?></td>
