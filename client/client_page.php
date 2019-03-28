@@ -14,7 +14,7 @@ if (!$logged_user->is_logged_in()) {
 }
 
 $active_page = 'events';
-$form_active = $edit_profile = $edit_password = $delete_account = false;
+$form_active = $edit_profile = $edit_password = $delete_account = $add_amount_form = false;
 $event_name = $event_location = $event_date = $event_people = $event_costs = $delete_error = $event_id = $eventId = "";
 $event_form_error = $form_submitted = $delete_event_error = $event_date_edit = $success_message = $event_form_succ = "";
 $notification_count = null;
@@ -173,6 +173,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $delete_error = "Something went wrong. Please try again later.";
         }
+    }elseif (isset($_POST['notification_event'])){
+        $action = $_POST['notification_event'];
+        $active_page = 'notification';
+
+        if ($action == 'view_add_amount'){
+            $add_amount_form = true;
+
+            $notification_id = $_POST['notification_id'];
+            $eventDetails = $logged_user->viewEventDetails($_POST['event_id']);
+            $event_id = $eventDetails['id'];
+            $event_name = $eventDetails['name'];
+            $event_cost = $eventDetails['total_cost'];
+            $event_balance = $eventDetails['total_bal'];
+
+        }elseif ($action == 'add_amount') {
+            $p_cost = (int)$_POST['event_cost'];
+            $amount = (int)$_POST['amount'];
+
+            $n_cost = ($p_cost + $amount);
+
+            if ($logged_user->updateEventAmount($n_cost)){
+                $add_amount_form = false;
+                $success_message = "Amount Updated";
+            }else{
+                $add_amount_form = true;
+                $success_message = "Error occurred on update";
+            }
+        }elseif ($action == 'mark_as_read') {
+            if ($logged_user->updateNotification($_POST['notification_id'])){
+                $add_amount_form = false;
+                $success_message = "Notification Read";
+            }else{
+                $add_amount_form = true;
+                $success_message = "Notification not read";
+            }
+        }
     }
 }
 
@@ -235,7 +271,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="hidden" name="page" value="notification">
 
                     <button class="btn btn-menu-side" type="submit">
-                        Notification <?php echo $notification_count ?></button>
+                        Notification <?php if ($logged_user->countUserNotifications($_SESSION['id']) > 0) {
+                            echo $logged_user->countUserNotifications($_SESSION['id']);
+                        } else {
+                            echo '';
+                        } ?></button>
                 </form>
             </div>
         </div>

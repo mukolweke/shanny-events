@@ -65,7 +65,7 @@
 
                                 <button class="btn btn-edit">Add Subtask</button>
                             </form>
-                            <?php if ($add_funds_request) { ?>
+                            <?php if ($total_bal == 0) { ?>
                                 <form action="" method="post">
                                     <input type="hidden" name="event_sub_task_actions" value="request_add_funds">
 
@@ -75,17 +75,6 @@
                                     <button class="btn btn-primary">Request Funds</button>
                                 </form>
                             <?php } ?>
-                            <?php if ($total_bal != 0) { ?>
-                                <form action="" method="post">
-                                    <input type="hidden" name="event_sub_task_actions" value="request_add_funds">
-
-                                    <input type="hidden" name="event_id" value="<?php echo $id; ?>">
-                                    <input type="hidden" name="client_id" value="<?php echo $user_id; ?>">
-
-                                    <button class="btn btn-primary">Print Events Expenditure</button>
-                                </form>
-                            <?php } ?>
-
                             <form action="" method="post">
                                 <input type="hidden" name="view_event_action" value="done">
 
@@ -93,6 +82,16 @@
 
                                 <button class="btn btn-success">Event Completed</button>
                             </form>
+                            <?php if (sizeof($events_task_data) > 0) { ?>
+                                <form action="../../backend/export.php" method="post">
+                                    <input type="hidden" name="export_action" value="print_expenses">
+
+                                    <input type="hidden" name="event_id" value="<?php echo $id; ?>">
+                                    <input type="hidden" name="client_id" value="<?php echo $user_id; ?>">
+
+                                    <button class="btn btn-primary">Print Expenditure</button>
+                                </form>
+                            <?php } ?>
                         <?php } ?>
                     </div>
                 </td>

@@ -409,7 +409,7 @@ class Auth
             mysqli_stmt_bind_result($stmt, $id, $first_name, $last_name, $email, $phone);
 
             while (mysqli_stmt_fetch($stmt)) {
-                $users[] = ['id' => $id, 'first_name' => $first_name, 'last_name' => $last_name,'email' => $email, 'phone' => $phone];
+                $users[] = ['id' => $id, 'first_name' => $first_name, 'last_name' => $last_name, 'email' => $email, 'phone' => $phone];
             }
 
             if (empty($users)) {
@@ -430,7 +430,20 @@ class Auth
 
         mysqli_stmt_fetch($stmt);
 
-        return  $eventCount;
+        return $eventCount;
+    }
+
+    public function countUserNotifications($userId)
+    {
+        $stmt = $this->runQuery("SELECT COUNT(*) AS notificationCount FROM notifications WHERE to_id = $userId AND status = 1");
+
+        mysqli_stmt_execute($stmt);
+
+        mysqli_stmt_bind_result($stmt, $notificationCount);
+
+        mysqli_stmt_fetch($stmt);
+
+        return $notificationCount;
     }
 
     public function getAllClients()
@@ -442,7 +455,7 @@ class Auth
             mysqli_stmt_bind_result($stmt, $id, $first_name, $last_name, $email, $phone);
 
             while (mysqli_stmt_fetch($stmt)) {
-                $users[] = ['id' => $id, 'first_name' => $first_name, 'last_name' => $last_name,'email' => $email, 'phone' => $phone];
+                $users[] = ['id' => $id, 'first_name' => $first_name, 'last_name' => $last_name, 'email' => $email, 'phone' => $phone];
             }
 
             if (empty($users)) {
@@ -450,6 +463,52 @@ class Auth
             } else {
                 return $users;
             }
+        }
+    }
+
+    public function getNotifications($userId)
+    {
+        $stmt = $this->runQuery("SELECT id, from_id, message, event FROM notifications WHERE to_id = $userId AND status = 1");
+
+        if (mysqli_stmt_execute($stmt)) {
+
+            mysqli_stmt_bind_result($stmt, $id, $from_id, $message, $event);
+
+            while (mysqli_stmt_fetch($stmt)) {
+                $notifications[] = ['id' => $id, 'from_id' => $from_id, 'message' => $message, 'event' => $event];
+            }
+
+            if (empty($notifications)) {
+                return false;
+            } else {
+                return $notifications;
+            }
+        }
+    }
+
+    public function updateEventAmount($amount)
+    {
+        $event_id = $_POST['event_id'];
+        $notification_id = $_POST['notification_id'];
+
+        $stmtEvent = $this->runQuery("UPDATE events SET total_cost = $amount WHERE id = $event_id");
+
+        $stmtNotification = $this->updateNotification($notification_id);
+
+        if (mysqli_stmt_execute($stmtEvent) && $stmtNotification) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function updateNotification($notification_id){
+        $stmtNotification = $this->runQuery("UPDATE notifications SET status = 0 WHERE id = $notification_id");
+
+        if (mysqli_stmt_execute($stmtNotification)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -1,13 +1,16 @@
-<?php
-
-
-?>
-
-
-
-
 <div class="latest-requests-list-form">
     <?php if (sizeof($events) > 0) { ?>
+
+        <form action="../../backend/export.php" method="post">
+            <input type="hidden" name="export_action" value="print_events">
+
+            <input type="hidden" name="status_id" value="<?php echo $status_id; ?>">
+
+            <button class="btn" style="color: #fff;background-color: #f0ad4e;border-color: #eea236;">PRINT EVENTS</button>
+        </form>
+        <br>
+        <hr>
+
         <table style="width:100%">
             <tr>
                 <th class="">Name</th>

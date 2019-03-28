@@ -73,6 +73,12 @@ p {
     border-color: #d43f3a;
 }
 
+.btn-warn {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+
 .btn-edit {
     color: #fff;
     background-color: #5bc0de;
@@ -140,12 +146,9 @@ p {
 }
 
 .backdrop {
-<<<<<<< HEAD
-    background: black url(./styles/img/banner1.jpg) no-repeat;
-=======
+    /*background: black url(./styles/img/banner1.jpg) no-repeat;*/
     background-image: url(/styles/img/banner1.jpg);
     background-repeat: no-repeat;
->>>>>>> 0e05ac2aa989b2457c2dc7e1bc2ba1dcceac932a
     background-size: cover;
     position: relative;
     height: 550px;
