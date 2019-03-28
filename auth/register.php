@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $pass = password_hash(trim($_POST["password"]), PASSWORD_DEFAULT);
 
             if ($reg_user->register($first_name, $last_name, $email, $phone, $pass, 2)){
-                $this->redirect("../auth/login.php");
+                $reg_user->redirect("../auth/login.php");
             }else{
                 $form_err = "Please check your details are correct";
             }

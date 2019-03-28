@@ -82,7 +82,7 @@
 
                                 <button class="btn btn-success">Event Completed</button>
                             </form>
-                            <?php if (sizeof($events_task_data) > 0) { ?>
+                            <?php if($events_task_data){if (sizeof($events_task_data) > 0) { ?>
                                 <form action="../../backend/export.php" method="post">
                                     <input type="hidden" name="export_action" value="print_expenses">
 
@@ -91,7 +91,7 @@
 
                                     <button class="btn btn-primary">Print Expenditure</button>
                                 </form>
-                            <?php } ?>
+                            <?php }} ?>
                         <?php } ?>
                     </div>
                 </td>
@@ -109,7 +109,7 @@
         <?php if ($sub_task_form && !$event_sub_task) { ?>
             <div>
                 <!-- form to add the tasks -->
-                <form id="edit_form" action="../../admin/admin_page.php" method="post">
+                <form id="edit_form" action="../admin/admin_page.php" method="post">
                     <h3>Add SubTask</h3>
 
                     <div class="edit-form-group">
@@ -142,7 +142,7 @@
         <?php } else { ?>
 
             <?php
-
+            if($events_task_data){
             if (sizeof($events_task_data) > 0) { ?>
                 <div>
                     <!--table to list all the sub-task-->
@@ -187,6 +187,7 @@
                 <p>No Sub-Tasks available</p>
 
             <?php }
+            }
         } ?>
 
         <?php if ($edit_task && !$event_sub_task) { ?>
@@ -225,6 +226,7 @@
     <?php if ($status_id == 1) { ?>
         <h3>SubTasks</h3>
         <?php
+if ($events_task_data) {
 
         if (sizeof($events_task_data) > 0) { ?>
             <div>
@@ -258,7 +260,7 @@
 
             <p>No Sub-Tasks available</p>
 
-        <?php }
+        <?php }}
     } ?>
 
 </div>

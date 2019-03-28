@@ -1,7 +1,7 @@
 <div class="latest-requests-list-form">
-    <?php if (sizeof($events) > 0) { ?>
+    <?php if(isset($events)) {if (sizeof($events) > 0) { ?>
 
-        <form action="../../backend/export.php" method="post">
+        <form action="../backend/export.php" method="post">
             <input type="hidden" name="export_action" value="print_events">
 
             <input type="hidden" name="status_id" value="<?php echo $status_id; ?>">
@@ -39,5 +39,5 @@
         </table>
     <?php } else { ?>
         <p>No Events Available yet</p>
-    <?php } ?>
+    <?php }} ?>
 </div>

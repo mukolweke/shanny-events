@@ -23,7 +23,7 @@ function getEventDetails($eventId)
 
 <div class="profile-page">
     <h1 class="profile-title">Notifications</h1>
-
+<?php if ($notifications) { ?>
     <?php if (sizeof($notifications) > 0) { ?>
 
         <table style="width:100%">
@@ -40,7 +40,7 @@ function getEventDetails($eventId)
                     <td class=""><?php echo $array['message']; ?></td>
                     <td class=""><?php echo getEventDetails($array['event']) ?></td>
                     <td class=" action-btns">
-                        <form action="/client/client_page.php" method="post">
+                        <form action="./client_page.php" method="post">
                             <input type="hidden" name="notification_event" value="view_add_amount">
 
                             <input type="hidden" name="notification_id" value="<?php echo $array['id']; ?>">
@@ -54,7 +54,7 @@ function getEventDetails($eventId)
         </table>
     <?php } else { ?>
         <p>No new notifications</p>
-    <?php } ?>
+    <?php }} ?>
 
     <?php if ($add_amount_form) { ?>
         <h3>Add Amount</h3>
@@ -64,7 +64,7 @@ function getEventDetails($eventId)
         <p><b>Event Balance: </b><?php echo $event_balance ?></p>
 
         <!-- form to add the tasks -->
-        <form id="edit_form" action="/client/client_page.php" method="post">
+        <form id="edit_form" action="./client_page.php" method="post">
             <div class="edit-form-group">
                 <label for="cost">Amount</label>
                 <input type="number" tabindex="3" id="amount" name="amount" required>
@@ -85,7 +85,7 @@ function getEventDetails($eventId)
 
         <h3>Else</h3>
 
-        <form id="edit_form" action="/client/client_page.php" method="post">
+        <form id="edit_form" action="./client_page.php" method="post">
             <input type="hidden" name="notification_event" value="mark_as_read">
 
             <input type="hidden" name="notification_id" value="<?php echo $array['id']; ?>">

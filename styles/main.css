@@ -147,12 +147,11 @@ p {
 
 .backdrop {
     /*background: black url(./styles/img/banner1.jpg) no-repeat;*/
-    background-image: url(/styles/img/banner1.jpg);
+    background-image: url(./img/banner1.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
     height: 550px;
-    width: 200%;
 }
 
 .banner-text {

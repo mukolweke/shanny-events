@@ -10,27 +10,36 @@ if ($logged_user->getEventsByStatus($status_id)) {
 }
 
 // get the events
-$event_details = $logged_user->viewEventDetails($event_id);
-$id = $event_details['id'];
-$name = $event_details['name'];
-$location = $event_details['location'];
-$date = $event_details['date'];
-$people_count = $event_details['people_count'];
-$total_cost = $event_details['total_cost'];
-$user_id = $event_details['user_id'];
-$status_id = $event_details['status'];
-$total_bal = intval($event_details['total_bal']);
-
+if(isset($event_id)){
+    $event_details = $logged_user->viewEventDetails($event_id);
+    $id = $event_details['id'];
+    $name = $event_details['name'];
+    $location = $event_details['location'];
+    $date = $event_details['date'];
+    $people_count = $event_details['people_count'];
+    $total_cost = $event_details['total_cost'];
+    $user_id = $event_details['user_id'];
+    $status_id = $event_details['status'];
+    $total_bal = intval($event_details['total_bal']);
+}
+  
 // get the user details: name
-$user_details = $logged_user->getClientInformation($user_id);
-$full_name = $user_details['first_name'] . ' ' . $user_details['last_name'];
+if(isset($user_id)){
+    $user_details = $logged_user->getClientInformation($user_id);
+    $full_name = $user_details['first_name'] . ' ' . $user_details['last_name'];  
+}
+
 
 // get the event status name
-$status_details = $logged_user->getStatusDetails($status_id);
-$status_name = $status_details['name'];
+if(isset($status_id)){
+    $status_details = $logged_user->getStatusDetails($status_id);
+    $status_name = $status_details['name'];  
+}
 
 // get the sub-task details for a given event.
-$events_task_data = $logged_user->getEventsSubTask($id);
+if (isset($id)) {
+   $events_task_data = $logged_user->getEventsSubTask($id); 
+}
 
 $sum = 0;
 $event_balance = 0;

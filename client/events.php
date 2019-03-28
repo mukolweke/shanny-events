@@ -31,7 +31,7 @@ if ($logged_user->getAllEvents($_SESSION['id'])) {
             <th class="">Actions</th>
         </tr>
 
-        <?php foreach ($events as $array) { ?>
+        <?php if($events) { foreach ($events as $array) { ?>
             <tr>
                 <td class=""><?php echo $array['name']; ?></td>
                 <td class=""><?php echo $array['location']; ?></td>
@@ -57,6 +57,6 @@ if ($logged_user->getAllEvents($_SESSION['id'])) {
                     </form>
                 </td>
             </tr>
-        <?php }; ?>
+        <?php }}; ?>
     </table>
 </div>
